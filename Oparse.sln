@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Oparse", "Oparse.vcxproj", "{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+		Standalone_Debug|x64 = Standalone_Debug|x64
+		Standalone_Debug|x86 = Standalone_Debug|x86
+		Standalone_Release|x64 = Standalone_Release|x64
+		Standalone_Release|x86 = Standalone_Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Debug|x64.ActiveCfg = Debug|x64
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Debug|x64.Build.0 = Debug|x64
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Debug|x86.ActiveCfg = Debug|Win32
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Debug|x86.Build.0 = Debug|Win32
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Release|x64.ActiveCfg = Release|x64
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Release|x64.Build.0 = Release|x64
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Release|x86.ActiveCfg = Release|Win32
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Release|x86.Build.0 = Release|Win32
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Standalone_Debug|x64.ActiveCfg = Standalone_Debug|x64
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Standalone_Debug|x64.Build.0 = Standalone_Debug|x64
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Standalone_Debug|x86.ActiveCfg = Standalone_Debug|Win32
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Standalone_Debug|x86.Build.0 = Standalone_Debug|Win32
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Standalone_Release|x64.ActiveCfg = Standalone_Release|x64
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Standalone_Release|x64.Build.0 = Standalone_Release|x64
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Standalone_Release|x86.ActiveCfg = Standalone_Release|Win32
+		{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}.Standalone_Release|x86.Build.0 = Standalone_Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80E1A760-B25D-475A-844C-1860B34F23BE}
+	EndGlobalSection
+EndGlobal

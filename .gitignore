@@ -1,0 +1,8 @@
+
+**/Debug
+**/Release
+/Standalone_Debug
+/Standalone_Release
+*.vcxproj.user
+**/.vs
+/lib
