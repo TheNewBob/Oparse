@@ -47,6 +47,20 @@ namespace Oparse
 		}
 	}
 
+	void clearModelDef(OpModelDef &mapping)
+	{
+		for (auto param = mapping.begin(); param != mapping.end(); ++param)
+		{
+			OpValue *value = param->second.first;
+			vector<OpValidator*> validators = param->second.second;
+
+			// delete the values, but not the validators. There exists only one of each, after all.
+			delete value;
+			validators.clear();
+		}
+		mapping.clear();
+	}
+
 	/**
 	 * Validates a parsed map using the provided validators.
 	 */
@@ -90,6 +104,7 @@ namespace Oparse
 			}
 		}
 		validateParsedMap(mapping, result);
+		clearModelDef(mapping);
 		return result;
 	}
 #else
@@ -127,6 +142,7 @@ namespace Oparse
 			parseLine(l, mapping, result);
 		}
 		validateParsedMap(mapping, result);
+		clearModelDef(mapping);
 		return result;
 	}
 #endif

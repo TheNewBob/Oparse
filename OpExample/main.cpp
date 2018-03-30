@@ -14,17 +14,18 @@ int main()
 	bool isNotHere = true;
 	
 	vector<string>() = {};
+	OpModelDef model = {
+		{ "answer",{ Oparse::_Int(answer),{ &REQUIRED } } },
+		{ "sqrt2",{ Oparse::_Float(sqrt2),{} } },
+		{ "pi",{ Oparse::_Double(pi),{} } },
+		{ "question",{ Oparse::_String(question),{} } },
+		{ "makesSense",{ Oparse::_Bool(makesSense),{} } },
+		{ "isNotHere",{ _Bool(isNotHere),{ &REQUIRED } } }
+	};
 
 	auto result = Oparse::ParseFile(
 		"testme.cfg",
-		Oparse::OpModelDef() = {
-			{ "answer", { Oparse::_Int(answer), {&REQUIRED} } },
-			{ "sqrt2", { Oparse::_Float(sqrt2), {} } },
-			{ "pi", { Oparse::_Double(pi), {} } },
-			{ "question", { Oparse::_String(question), {} } },
-			{ "makesSense", { Oparse::_Bool(makesSense), {} } },
-			{ "isNotHere", { _Bool(isNotHere), { &REQUIRED } } }
-		}
+		model
 	);
 
 	bool bugme = true;
