@@ -11,18 +11,20 @@ int main()
 	double pi = -1;
 	string question = "";
 	bool makesSense = true;
+	bool isNotHere = true;
+	
+	vector<string>() = {};
 
-	OpModelDef mapping = {
-		{ "answer", _Int(answer) },
-		{ "sqrt2", _Float(sqrt2) },
-		{ "pi", _Double(pi) },
-		{ "question", _String(question) },
-		{ "makesSense", _Bool(makesSense)}
-	};
-
-	auto result = ParseFile(
+	auto result = Oparse::ParseFile(
 		"testme.cfg",
-		mapping
+		Oparse::OpModelDef() = {
+			{ "answer", { Oparse::_Int(answer), {&REQUIRED} } },
+			{ "sqrt2", { Oparse::_Float(sqrt2), {} } },
+			{ "pi", { Oparse::_Double(pi), {} } },
+			{ "question", { Oparse::_String(question), {} } },
+			{ "makesSense", { Oparse::_Bool(makesSense), {} } },
+			{ "isNotHere", { _Bool(isNotHere), { &REQUIRED } } }
+		}
 	);
 
 	bool bugme = true;

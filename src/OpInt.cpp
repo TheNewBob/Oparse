@@ -17,5 +17,6 @@ namespace Oparse
 	void OpInt::ParseValue(string value)
 	{
 		receiver = stoi(value);
+		setParsed();
 	}
 }

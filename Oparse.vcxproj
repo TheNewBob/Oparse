@@ -34,6 +34,31 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Oparse.h" />
+    <ClInclude Include="include\OpBool.h" />
+    <ClInclude Include="include\OpDouble.h" />
+    <ClInclude Include="include\OpFloat.h" />
+    <ClInclude Include="include\OpInt.h" />
+    <ClInclude Include="include\OpStdLibs.h" />
+    <ClInclude Include="include\OpString.h" />
+    <ClInclude Include="include\OpValidator.h" />
+    <ClInclude Include="include\OpValue.h" />
+    <ClInclude Include="include\OpvRequired.h" />
+    <ClInclude Include="include\PARSINGRESULT.h" />
+    <ClInclude Include="include\StringOps.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Oparse.cpp" />
+    <ClCompile Include="src\OpBool.cpp" />
+    <ClCompile Include="src\OpDouble.cpp" />
+    <ClCompile Include="src\OpFactories.cpp" />
+    <ClCompile Include="src\OpFloat.cpp" />
+    <ClCompile Include="src\OpInt.cpp" />
+    <ClCompile Include="src\OpString.cpp" />
+    <ClCompile Include="src\OpvRequired.cpp" />
+    <ClCompile Include="src\StringOps.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{B3D8C1DA-5DD2-4D34-A04E-8D3059B2DBFA}</ProjectGuid>
@@ -244,26 +269,6 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="include\Oparse.h" />
-    <ClInclude Include="include\OpBool.h" />
-    <ClInclude Include="include\OpDouble.h" />
-    <ClInclude Include="include\OpFloat.h" />
-    <ClInclude Include="include\OpInt.h" />
-    <ClInclude Include="include\OpStdLibs.h" />
-    <ClInclude Include="include\OpString.h" />
-    <ClInclude Include="include\StringOps.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Oparse.cpp" />
-    <ClCompile Include="src\OpBool.cpp" />
-    <ClCompile Include="src\OpDouble.cpp" />
-    <ClCompile Include="src\OpFloat.cpp" />
-    <ClCompile Include="src\OpInt.cpp" />
-    <ClCompile Include="src\OpString.cpp" />
-    <ClCompile Include="src\OpValue.cpp" />
-    <ClCompile Include="src\StringOps.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

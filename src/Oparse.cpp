@@ -8,14 +8,17 @@
 #include "Oparse.h"
 #include <algorithm>
 
+
 namespace Oparse
 {
+	const string OP_GENERAL_ERROR = "OP_GENERAL";
+
 	pair<string, string> splitParamAndValue(const string &configline)
 	{
 		vector<string> tokens;
-		Oparse::SplitString(configline, tokens, "=");
-		string key = Oparse::RemoveExtraWhiteSpace(tokens[0]);
-		string value = tokens.size() > 1 ? Oparse::RemoveExtraWhiteSpace(tokens[1]) : "";
+		SplitString(configline, tokens, "=");
+		string key = RemoveExtraWhiteSpace(tokens[0]);
+		string value = tokens.size() > 1 ? RemoveExtraWhiteSpace(tokens[1]) : "";
 		return make_pair(key, value);
 	}
 
@@ -34,41 +37,31 @@ namespace Oparse
 			{
 				try
 				{
-					it->second->ParseValue(keyValue.second);
+					it->second.first->ParseValue(keyValue.second);
 				}
 				catch (exception e)
 				{
-					result.AddError(e.what());
+					result.AddError(it->first, e.what());
 				}
 			}
 		}
 	}
 
-
-
-	OpInt *_Int(int & receiver)
+	/**
+	 * Validates a parsed map using the provided validators.
+	 */
+	void validateParsedMap(OpModelDef &mapping, PARSINGRESULT &result)
 	{
-		return new OpInt(receiver);
-	}
-
-	OpFloat *_Float(float & receiver)
-	{
-		return new OpFloat(receiver);
-	}
-
-	OpDouble *_Double(double & receiver)
-	{
-		return new OpDouble(receiver);
-	}
-
-	OpString *_String(string & receiver)
-	{
-		return new OpString(receiver);
-	}
-
-	OpBool * _Bool(bool & receiver)
-	{
-		return new OpBool(receiver);
+		for (auto param = mapping.begin(); param != mapping.end(); ++param)
+		{
+			// walk through all validators for each value. 
+			OpValue *value = param->second.first;
+			vector<OpValidator*> &validators = param->second.second;
+			for (auto validator = validators.begin(); validator != validators.end(); ++validator)
+			{
+				(*validator)->Validate(value, param->first, result);
+			}
+		}
 	}
 
 #ifdef OPARSE_STANDALONE
@@ -82,7 +75,7 @@ namespace Oparse
 		{
 			stringstream ss;
 			ss << "Could not open file: " << path;
-			result.AddError(ss.str());
+			result.AddError(OP_GENERAL_ERROR, ss.str());
 			return result;
 		}
 		else
@@ -96,6 +89,7 @@ namespace Oparse
 				parseLine(line, mapping, result);
 			}
 		}
+		validateParsedMap(mapping, result);
 		return result;
 	}
 #else
@@ -114,7 +108,7 @@ namespace Oparse
 			PARSINGRESULT result;
 			stringstream ss;
 			ss << "Could not open file: " << path;
-			result.AddError(ss.str());
+			result.AddError(OP_GENERAL_ERROR, ss.str());
 			return result;
 		}
 		else
@@ -132,6 +126,7 @@ namespace Oparse
 		{
 			parseLine(l, mapping, result);
 		}
+		validateParsedMap(mapping, result);
 		return result;
 	}
 #endif

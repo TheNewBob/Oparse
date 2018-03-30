@@ -23,5 +23,6 @@ namespace Oparse
 		{
 			receiver = value;
 		}
+		setParsed();
 	}
 }

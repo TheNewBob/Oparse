@@ -9,6 +9,7 @@ namespace Oparse
 	void OpDouble::ParseValue(string value)
 	{
 		receiver = stod(value);
+		setParsed();
 	}
 
 	OpDouble::OpDouble(double & receiver) : receiver(receiver)

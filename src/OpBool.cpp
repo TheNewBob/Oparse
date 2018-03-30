@@ -21,5 +21,6 @@ namespace Oparse
 		else if (lowercase == "false") receiver = false;
 		else if (stoi(value) > 0) receiver = true;
 		else receiver = false;
+		setParsed();
 	}
 }

@@ -17,5 +17,6 @@ namespace Oparse
 	void OpFloat::ParseValue(string value)
 	{
 		receiver = stof(value);
+		setParsed();
 	}
 }

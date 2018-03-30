@@ -36,6 +36,18 @@
     <ClInclude Include="include\OpString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\OpValidator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OpValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OpvRequired.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PARSINGRESULT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\StringOps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -50,6 +62,9 @@
     <ClCompile Include="src\OpDouble.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\OpFactories.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\OpFloat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -59,7 +74,7 @@
     <ClCompile Include="src\OpString.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\OpValue.cpp">
+    <ClCompile Include="src\OpvRequired.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\StringOps.cpp">
