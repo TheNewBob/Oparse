@@ -10,6 +10,7 @@
 #include "OpBool.h"
 #include "OpVector3.h"
 #include "OpList.h"
+#include "OpMixedList.h"
 
 #include "OpValidator.h"
 #include "OpvRequired.h"
@@ -21,6 +22,9 @@ using namespace std;
 
 namespace Oparse
 {
+	typedef map<string, pair<OpValue*, vector<OpValidator*>>> OpModelDef;
+	typedef vector<OpValue*> OpValues;
+
 	// Value factories
 	OpInt *_Int(int &receiver);
 	OpFloat *_Float(float &receiver);
@@ -34,11 +38,11 @@ namespace Oparse
 	OpList *_LIST(vector<bool> &receiver, string delimiter = ",\t");
 	OpList *_LIST(vector<string> &receiver, string delimiter = ",\t");
 	OpList *_LIST(vector<VECTOR3> &receiver, string delimiter = ",\t");
+	OpMixedList *_MixedList(OpValues receivers, string delimiter = "\t");
 
 	//validator factories
 	OpvRequired *_REQUIRED();
 
-	typedef map<string, pair<OpValue*, vector<OpValidator*>>> OpModelDef;
 
 	//const string WHITESPACE;
 

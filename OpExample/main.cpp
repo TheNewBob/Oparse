@@ -4,6 +4,21 @@
 
 using namespace Oparse;
 
+struct MixedListDemo {
+	string first = "";
+	string second = "";
+	string third = "";
+	VECTOR3 vector3;
+	bool testSuccessful = false;
+
+	OpMixedList *mapping = _MixedList(OpValues() =
+		{ _String(first),
+		  _Vector3(vector3),
+		  _String(second),
+		  _Bool(testSuccessful),
+		  _String(third) }, ",");
+};
+
 int main()
 {
 	int answer = -1;
@@ -19,6 +34,9 @@ int main()
 	vector<bool> boolList;
 	vector<string> stringList;
 	vector<VECTOR3> vector3List;
+
+	MixedListDemo mixedList;
+
 	
 
 	vector<string>() = {};
@@ -34,7 +52,8 @@ int main()
 		{ "floatList", { _LIST(floatList), {} } },
 		{ "boolList",{ _LIST(boolList),{} } },
 		{ "stringList",{ _LIST(stringList, "#"),{} } },
-		{ "vector3List", { _LIST(vector3List), {} } }
+		{ "vector3List", { _LIST(vector3List), {} } },
+		{ "mixedList", { mixedList.mapping, {} } }
 	};
 
 	auto result = Oparse::ParseFile(

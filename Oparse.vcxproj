@@ -58,6 +58,7 @@
     <ClCompile Include="src\OpFloat.cpp" />
     <ClCompile Include="src\OpInt.cpp" />
     <ClCompile Include="src\OpList.cpp" />
+    <ClCompile Include="src\OpMixedList.cpp" />
     <ClCompile Include="src\OpString.cpp" />
     <ClCompile Include="src\OpVector3.cpp" />
     <ClCompile Include="src\OpvRequired.cpp" />

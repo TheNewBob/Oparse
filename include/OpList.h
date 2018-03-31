@@ -2,6 +2,9 @@
 
 namespace Oparse
 {
+	/**
+	 * \brief A List of indeterminate length where every element has the same type.
+	 */
 	class OpList 
 		: public OpValue
 	{

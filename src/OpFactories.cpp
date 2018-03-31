@@ -65,6 +65,11 @@ namespace Oparse
 		return new OpList(receiver, delimiter);
 	}
 
+	OpMixedList * _MixedList(OpValues receivers, string delimiter)
+	{
+		return new OpMixedList(receivers, delimiter);
+	}
+
 	//validators
 
 	OpvRequired *_REQUIRED()
