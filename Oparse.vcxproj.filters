@@ -57,6 +57,9 @@
     <ClInclude Include="include\OpVector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\OpMixedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Oparse.cpp">
