@@ -51,6 +51,9 @@
     <ClInclude Include="include\StringOps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\OpList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Oparse.cpp">
@@ -78,6 +81,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\StringOps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

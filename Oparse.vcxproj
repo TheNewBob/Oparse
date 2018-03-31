@@ -40,6 +40,7 @@
     <ClInclude Include="include\OpDouble.h" />
     <ClInclude Include="include\OpFloat.h" />
     <ClInclude Include="include\OpInt.h" />
+    <ClInclude Include="include\OpList.h" />
     <ClInclude Include="include\OpStdLibs.h" />
     <ClInclude Include="include\OpString.h" />
     <ClInclude Include="include\OpValidator.h" />
@@ -55,6 +56,7 @@
     <ClCompile Include="src\OpFactories.cpp" />
     <ClCompile Include="src\OpFloat.cpp" />
     <ClCompile Include="src\OpInt.cpp" />
+    <ClCompile Include="src\OpList.cpp" />
     <ClCompile Include="src\OpString.cpp" />
     <ClCompile Include="src\OpvRequired.cpp" />
     <ClCompile Include="src\StringOps.cpp" />

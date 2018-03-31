@@ -54,8 +54,12 @@ namespace Oparse
 			OpValue *value = param->second.first;
 			vector<OpValidator*> validators = param->second.second;
 
-			// delete the values, but not the validators. There exists only one of each, after all.
+			// delete the values and the validators of this map.
 			delete value;
+			for (unsigned int i = 0; i < validators.size(); ++i)
+			{
+				delete validators[i];
+			}
 			validators.clear();
 		}
 		mapping.clear();

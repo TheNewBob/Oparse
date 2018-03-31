@@ -16,7 +16,7 @@ namespace Oparse
 	}
 	void OpBool::ParseValue(string value)
 	{
-		auto lowercase = StringToLower(value);
+		auto lowercase = StringToLower(RemoveExtraWhiteSpace(value));
 		if (lowercase == "true") receiver = true;
 		else if (lowercase == "false") receiver = false;
 		else if (stoi(value) > 0) receiver = true;

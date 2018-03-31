@@ -8,6 +8,7 @@
 #include "OpDouble.h"
 #include "OpString.h"
 #include "OpBool.h"
+#include "OpList.h"
 
 #include "OpValidator.h"
 #include "OpvRequired.h"
@@ -19,16 +20,22 @@ using namespace std;
 
 namespace Oparse
 {
+	const string WHITESPACE;
+
 	// Value factories
 	OpInt *_Int(int &receiver);
 	OpFloat *_Float(float &receiver);
 	OpDouble *_Double(double &receiver);
 	OpString *_String(string &receiver);
 	OpBool *_Bool(bool &receiver);
+	OpList *_LIST(vector<int> &receiver, string delimiter = ",");
+	OpList *_LIST(vector<float> &receiver, string delimiter = ",");
+	OpList *_LIST(vector<double> &receiver, string delimiter = ",");
+	OpList *_LIST(vector<bool> &receiver, string delimiter = ",");
+	OpList *_LIST(vector<string> &receiver, string delimiter = ",");
 
-	
-	
-	extern OpvRequired REQUIRED;
+	//validator factories
+	OpvRequired *_REQUIRED();
 
 	typedef map<string, pair<OpValue*, vector<OpValidator*>>> OpModelDef;
 
