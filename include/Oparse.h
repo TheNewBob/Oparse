@@ -8,6 +8,7 @@
 #include "OpDouble.h"
 #include "OpString.h"
 #include "OpBool.h"
+#include "OpVector3.h"
 #include "OpList.h"
 
 #include "OpValidator.h"
@@ -20,19 +21,19 @@ using namespace std;
 
 namespace Oparse
 {
-	const string WHITESPACE;
-
 	// Value factories
 	OpInt *_Int(int &receiver);
 	OpFloat *_Float(float &receiver);
 	OpDouble *_Double(double &receiver);
 	OpString *_String(string &receiver);
 	OpBool *_Bool(bool &receiver);
-	OpList *_LIST(vector<int> &receiver, string delimiter = ",");
-	OpList *_LIST(vector<float> &receiver, string delimiter = ",");
-	OpList *_LIST(vector<double> &receiver, string delimiter = ",");
-	OpList *_LIST(vector<bool> &receiver, string delimiter = ",");
-	OpList *_LIST(vector<string> &receiver, string delimiter = ",");
+	OpVector3 *_Vector3(VECTOR3 &receiver);
+	OpList *_LIST(vector<int> &receiver, string delimiter = ",\t");
+	OpList *_LIST(vector<float> &receiver, string delimiter = ",\t");
+	OpList *_LIST(vector<double> &receiver, string delimiter = ",\t");
+	OpList *_LIST(vector<bool> &receiver, string delimiter = ",\t");
+	OpList *_LIST(vector<string> &receiver, string delimiter = ",\t");
+	OpList *_LIST(vector<VECTOR3> &receiver, string delimiter = ",\t");
 
 	//validator factories
 	OpvRequired *_REQUIRED();

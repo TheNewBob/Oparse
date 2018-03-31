@@ -13,6 +13,7 @@ namespace Oparse
 		OpList(vector<double> &receiver, string delimiter = ",");
 		OpList(vector<bool> &receiver, string delimiter = ",");
 		OpList(vector<string> &receiver, string delimiter = ",");
+		OpList(vector<VECTOR3> &receiver, string delimiter = ",");
 		~OpList() {};
 
 		void ParseValue(string value);

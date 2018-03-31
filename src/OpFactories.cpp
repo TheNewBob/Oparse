@@ -30,6 +30,11 @@ namespace Oparse
 		return new OpBool(receiver);
 	}
 
+	OpVector3 * _Vector3(VECTOR3 & receiver)
+	{
+		return new OpVector3(receiver);
+	}
+
 	OpList *_LIST(vector<int>& receiver, string delimiter)
 	{
 		return new OpList(receiver, delimiter);
@@ -55,6 +60,10 @@ namespace Oparse
 		return new OpList(receiver, delimiter);
 	}
 
+	OpList *_LIST(vector<VECTOR3>& receiver, string delimiter)
+	{
+		return new OpList(receiver, delimiter);
+	}
 
 	//validators
 
