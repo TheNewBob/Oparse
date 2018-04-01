@@ -22,23 +22,38 @@ These factories take a reference to the variable they should bind to as an argum
 
 __non-primitve data types__
 
-Oparse additionally supports std::string and the Orbiter type VECTOR3.
-These are wrapped by OpString and OpVector3 respectively, and can be created by using the factories _String and _Vector3,
-again accepting a reference to the variable to bind to as an argument.
+* OpString, which wraps an std::string. Note that ; and \n are reserved symbols in cfg files and can't be used in a string.
+Appart from these two, any ASCII-symbol should be parsed as expected. I don't know exactly what'll happen if you throw UTF-8 in there, but it can't be good.
+You can use the _String factory for quick mapping.
+
+* OpVector3 maps to the Orbiter VECTOR3 struct.Unsurprisingly, it can be conveniently instantiated with _Vector3.
 Note that convention in .cfg files for VECTOR3 seems to be using a space as delimiter between the values for the three axes,
 which I find unfortunate, but I'm not going to break it. Space as delimiter for VECTOR3-fields is therefore hardcoded and cannot be changed.
 
 __list types__
 
-What's a parsing library without lists? Pretty useless, that's what it is. So Oparse supports two fundamentally different list types:
+What's a parsing library without lists? Pretty useless, that's what it is. So Oparse supports three fundamentally different list types:
  * OpList, which is a list of indeterminate length where every element is of the same type. So, A very typical list.
  Lists can map to an std::vector of any of the data types mentioned above, and the delimiter between elements is modifiable on a list-by-list basis.
  They can be constructed with one of the _List factories.
 
  * OpMixedList, which is a list of *determinate* length, but every element can map to a different type. If you take a look at Orbiter cfg files,
  the declaration of attachment points is a typical example of this. It is one line with a string, followed by 3 VECTOR3s, followed by another string.
- A OpMixedList couldn't actually be used to parse attachment points, because they're inside a block, not assigned to a parameter, which will be explained further down.
- However, I' think you should get the picture what it's for. You can use the _MixedList factory to instantiate it, and use the OpValues typedef to pass your definition inline if you so wish.
+ Though An OpMixedList couldn't actually be used to parse attachment points, see OpBlockList below. You should however get a picture of what a MixedList is
+ from this example.
+ 
+ * OpBlockList, which is support for the cfg convention of blocks of values between a BEGIN_ and an END_ statement, as seen in dockport and attachment point definition. Those specifically are parsed by Orbiter itself so usually you don't have to, but this way of writing definitions can come in handy for other data.
+ In effect, a BlockList is a list of MixedLists (see above). The _Block<T> factory is available for mapping to a reference of either an std::vector<T>,
+ or an std::vector<T*>, depending on how you prefer the data to be allocated. Note that the class or struct provided must implement a method with the signature 
+ `OpMixedList *GetMapping()` that will be used to map the cfg values to the newly created objects.
+
+
+
+ ### Validators
+
+ comming soon.
+ 
+
 
  ### Examples
 

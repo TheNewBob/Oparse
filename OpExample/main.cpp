@@ -11,12 +11,15 @@ struct MixedListDemo {
 	VECTOR3 vector3;
 	bool testSuccessful = false;
 
-	OpMixedList *mapping = _MixedList(OpValues() =
-		{ _String(first),
-		  _Vector3(vector3),
-		  _String(second),
-		  _Bool(testSuccessful),
-		  _String(third) }, ",");
+	OpMixedList *GetMapping()
+	{
+		return _MixedList(OpValues() =
+			{ _String(first),
+			  _Vector3(vector3),
+			  _String(second),
+			  _Bool(testSuccessful),
+			  _String(third) }, ",");
+	}
 };
 
 int main()
@@ -36,6 +39,7 @@ int main()
 	vector<VECTOR3> vector3List;
 
 	MixedListDemo mixedList;
+	vector<MixedListDemo*> blockDemo;
 
 	
 
@@ -53,7 +57,8 @@ int main()
 		{ "boolList",{ _LIST(boolList),{} } },
 		{ "stringList",{ _LIST(stringList, "#"),{} } },
 		{ "vector3List", { _LIST(vector3List), {} } },
-		{ "mixedList", { mixedList.mapping, {} } }
+		{ "mixedList", { mixedList.GetMapping(), {} } },
+		{ "BLOCKLIST 1", { _Block<MixedListDemo>(blockDemo), {} } }
 	};
 
 	auto result = Oparse::ParseFile(

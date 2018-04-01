@@ -35,6 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\OpBlockList.h" />
     <ClInclude Include="include\Oparse.h" />
     <ClInclude Include="include\OpBool.h" />
     <ClInclude Include="include\OpDouble.h" />

@@ -11,6 +11,7 @@
 #include "OpVector3.h"
 #include "OpList.h"
 #include "OpMixedList.h"
+#include "OpBlockList.h"
 
 #include "OpValidator.h"
 #include "OpvRequired.h"
@@ -39,6 +40,8 @@ namespace Oparse
 	OpList *_LIST(vector<string> &receiver, string delimiter = ",\t");
 	OpList *_LIST(vector<VECTOR3> &receiver, string delimiter = ",\t");
 	OpMixedList *_MixedList(OpValues receivers, string delimiter = "\t");
+	template <typename T> OpBlockList<T> *_Block(vector<T> &receiver) { return new OpBlockList<T>(receiver); };
+	template <typename T> OpBlockList<T> *_Block(vector<T*> &receiver) { return new OpBlockList<T>(receiver); };
 
 	//validator factories
 	OpvRequired *_REQUIRED();

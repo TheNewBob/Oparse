@@ -7,6 +7,7 @@
 #include "OpStdLibs.h"
 #include "Oparse.h"
 #include <algorithm>
+#include <sstream>
 
 
 namespace Oparse
@@ -22,26 +23,71 @@ namespace Oparse
 		return make_pair(key, value);
 	}
 
+	void parseParamValue(const pair<string, string> keyValue, OpModelDef &mapping, PARSINGRESULT &result)
+	{
+		auto it = mapping.find(keyValue.first);
+		if (it != mapping.end())
+		{
+			try
+			{
+				it->second.first->ParseValue(keyValue.second);
+			}
+			catch (exception e)
+			{
+				result.AddError(it->first, e.what());
+			}
+		}
+	}
+
 	void parseLine(const string line, OpModelDef &mapping, PARSINGRESULT &result)
 	{
 		string l = line;
-		// remove comments, i.e. everything left of a ;
+		// remove comments, i.e. everything left of a ;, as well as leading and trailing whitespace
 		if (l.find_first_of(';') != std::string::npos)
 			l.erase(line.find_first_of(';'), std::string::npos);
+		l = RemoveExtraWhiteSpace(l);
+
+		static vector<string> readingBlock;
 
 		if (l != "")
 		{
-			auto keyValue = splitParamAndValue(l);
-			auto it = mapping.find(keyValue.first);
-			if (it != mapping.end())
+			string value = "";
+			
+			if (readingBlock.size() == 0)
 			{
-				try
+				//not currently reading a block. Check if this is the beginning of a block, otherwise try to split the line into param and value.
+				if (l.compare(0, 6,"BEGIN_") == 0)
 				{
-					it->second.first->ParseValue(keyValue.second);
+					// this is the start of a block. read the block name and continue.
+					readingBlock.push_back(l.substr(6, l.length()));
 				}
-				catch (exception e)
+				else
 				{
-					result.AddError(it->first, e.what());
+					auto keyValue = splitParamAndValue(line);
+					parseParamValue(keyValue, mapping, result);
+				}
+			}
+			else
+			{
+				//currently reading a block. Decide whether it's the end of a block, or whether it's a bocklist or a nested model
+				if (l.compare(0, 4, "END_") == 0)
+				{
+					// magic to enable some syntactical sugar in the cfg.
+					vector<string> paramTokens;
+					SplitString(l, paramTokens, "_ \t");
+					if (paramTokens.size() == 0 || paramTokens[1] != readingBlock.back().substr(0, paramTokens[1].length()))
+					{
+						stringstream msg;
+						msg << "Unexpected end of block: " << l << ". Expected END_" << readingBlock.back() << "!";
+						result.AddError(readingBlock.back(), msg.str());
+					}
+
+					// delete the last element of readingBlock, since the block has closed.
+					readingBlock.erase(readingBlock.begin() + (readingBlock.size() - 1));
+				}
+				else
+				{
+					parseParamValue(make_pair(readingBlock.back(), l), mapping, result);
 				}
 			}
 		}
