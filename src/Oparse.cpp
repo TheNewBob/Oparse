@@ -23,23 +23,49 @@ namespace Oparse
 		return make_pair(key, value);
 	}
 
-	void parseParamValue(const pair<string, string> keyValue, OpModelDef &mapping, PARSINGRESULT &result)
+
+	OpValue *GetParamFromMapping(const string key, const OpModelDef &mapping, vector<string> blocks)
 	{
-		auto it = mapping.find(keyValue.first);
+		auto it = mapping.find(key);
 		if (it != mapping.end())
+		{
+			return it->second.first;
+		}
+		else
+		{
+			//see if the parameter is in a deeper block
+			for (unsigned int i = blocks.size(); i > 0; --i)
+			{
+				auto block = mapping.find(blocks[i - 1]);
+				if (block != mapping.end())
+				{
+					auto *model = dynamic_cast<OpModelValue*>(block->second.first);
+					if (model != NULL)
+					{
+						return GetParamFromMapping(key, model->GetModelDef(), blocks);
+					}
+				}
+			}
+		}
+		return NULL;
+	}
+
+	void parseParamValue(OpValue *parser, const string value, const string key, PARSINGRESULT &result)
+	{
+		if (parser != NULL)
 		{
 			try
 			{
-				it->second.first->ParseValue(keyValue.second);
+				parser->ParseValue(value);
 			}
 			catch (exception e)
 			{
-				result.AddError(it->first, e.what());
+				result.AddError(key, e.what());
 			}
 		}
 	}
 
-	void parseLine(const string line, OpModelDef &mapping, PARSINGRESULT &result)
+	void parseLine(const string line, OpModelDef &mapping, PARSINGRESULT &result, vector<string> &blocks)
 	{
 		string l = line;
 		// remove comments, i.e. everything left of a ;, as well as leading and trailing whitespace
@@ -47,47 +73,53 @@ namespace Oparse
 			l.erase(line.find_first_of(';'), std::string::npos);
 		l = RemoveExtraWhiteSpace(l);
 
-		static vector<string> readingBlock;
-
 		if (l != "")
 		{
 			string value = "";
 			
-			if (readingBlock.size() == 0)
+			// Check if this is the beginning of a block, otherwise try to split the line into param and value.
+			if (l.compare(0, 6,"BEGIN_") == 0)
 			{
-				//not currently reading a block. Check if this is the beginning of a block, otherwise try to split the line into param and value.
-				if (l.compare(0, 6,"BEGIN_") == 0)
+				// this is the start of a block. read the block name and continue.
+				blocks.push_back(l.substr(6, l.length()));
+			}
+			else if (l.compare(0, 4, "END_") == 0)
+			{
+				if (blocks.size() > 0)
 				{
-					// this is the start of a block. read the block name and continue.
-					readingBlock.push_back(l.substr(6, l.length()));
+
+					// magic to enable some syntactical sugar in the cfg (END_FOO closes block BEGIN_FOO BAR)
+					vector<string> paramTokens;
+					SplitString(l, paramTokens, "_ \t");
+					if (paramTokens.size() == 0 || paramTokens[1] != blocks.back().substr(0, paramTokens[1].length()))
+					{
+						stringstream msg;
+						msg << "Unexpected end of block: " << l << ". Expected END_" << blocks.back() << "!";
+						result.AddError(blocks.back(), msg.str());
+					}
+
+					// delete the last element of readingBlock, since the block has closed.
+					blocks.erase(blocks.begin() + (blocks.size() - 1));
 				}
 				else
 				{
-					auto keyValue = splitParamAndValue(line);
-					parseParamValue(keyValue, mapping, result);
+					result.AddError(OP_GENERAL_ERROR, "Unexpected end of block. No block has been opened!");
 				}
 			}
 			else
 			{
-				//currently reading a block. Decide whether it's the end of a block, or whether it's a bocklist or a nested model
-				if (l.compare(0, 4, "END_") == 0)
+				if (StringContains(l, "="))
 				{
-					// magic to enable some syntactical sugar in the cfg.
-					vector<string> paramTokens;
-					SplitString(l, paramTokens, "_ \t");
-					if (paramTokens.size() == 0 || paramTokens[1] != readingBlock.back().substr(0, paramTokens[1].length()))
-					{
-						stringstream msg;
-						msg << "Unexpected end of block: " << l << ". Expected END_" << readingBlock.back() << "!";
-						result.AddError(readingBlock.back(), msg.str());
-					}
-
-					// delete the last element of readingBlock, since the block has closed.
-					readingBlock.erase(readingBlock.begin() + (readingBlock.size() - 1));
+					// This is a normal parameter, not a BlockList
+					auto keyValue = splitParamAndValue(line);
+					OpValue *parser = GetParamFromMapping(keyValue.first, mapping, blocks);
+					parseParamValue(parser, keyValue.second, keyValue.first, result);
 				}
 				else
 				{
-					parseParamValue(make_pair(readingBlock.back(), l), mapping, result);
+					// Line contains no =, must be an item of a BlockList
+					OpValue *parser = GetParamFromMapping(blocks.back(), mapping, blocks);
+					parseParamValue(parser, l, blocks.back(), result);
 				}
 			}
 		}
@@ -95,7 +127,7 @@ namespace Oparse
 
 	void clearModelDef(OpModelDef &mapping)
 	{
-		for (auto param = mapping.begin(); param != mapping.end(); ++param)
+/*		for (auto param = mapping.begin(); param != mapping.end(); ++param)
 		{
 			OpValue *value = param->second.first;
 			vector<OpValidator*> validators = param->second.second;
@@ -108,7 +140,7 @@ namespace Oparse
 			}
 			validators.clear();
 		}
-		mapping.clear();
+		mapping.clear();*/
 	}
 
 	/**
@@ -116,7 +148,7 @@ namespace Oparse
 	 */
 	void validateParsedMap(OpModelDef &mapping, PARSINGRESULT &result)
 	{
-		for (auto param = mapping.begin(); param != mapping.end(); ++param)
+/*		for (auto param = mapping.begin(); param != mapping.end(); ++param)
 		{
 			// walk through all validators for each value. 
 			OpValue *value = param->second.first;
@@ -125,7 +157,7 @@ namespace Oparse
 			{
 				(*validator)->Validate(value, param->first, result);
 			}
-		}
+		}*/
 	}
 
 #ifdef OPARSE_STANDALONE
@@ -145,14 +177,20 @@ namespace Oparse
 		else
 		{
 			string line;
-			vector<string> tokens;
-			bool readdata = false;
+			vector<string> blocks;
 
 			while (getline(file, line))
 			{
-				parseLine(line, mapping, result);
+				parseLine(line, mapping, result, blocks);
 			}
+
+			if (blocks.size() > 0)
+			{
+				result.AddError(OP_GENERAL_ERROR, "Unexpected end of file. Some blocks have not been closed!");
+			}
+
 		}
+
 		validateParsedMap(mapping, result);
 		clearModelDef(mapping);
 		return result;

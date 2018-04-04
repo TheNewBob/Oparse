@@ -1,8 +1,11 @@
 #pragma once
+
 #include "StringOps.h"
 #include "PARSINGRESULT.h"
 
 #include "OpValue.h"
+#include "OpValidator.h"
+
 #include "OpInt.h"
 #include "OpFloat.h"
 #include "OpDouble.h"
@@ -12,9 +15,11 @@
 #include "OpList.h"
 #include "OpMixedList.h"
 #include "OpBlockList.h"
+#include "OpModel.h"
+#include "OpModelValue.h"
 
-#include "OpValidator.h"
 #include "OpvRequired.h"
+
 
 
 
@@ -23,9 +28,6 @@ using namespace std;
 
 namespace Oparse
 {
-	typedef map<string, pair<OpValue*, vector<OpValidator*>>> OpModelDef;
-	typedef vector<OpValue*> OpValues;
-
 	// Value factories
 	OpInt *_Int(int &receiver);
 	OpFloat *_Float(float &receiver);

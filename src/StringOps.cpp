@@ -1,5 +1,6 @@
 #include "OpStdLibs.h"
 #include <algorithm>
+#include "..\include\StringOps.h"
 
 namespace Oparse
 {
@@ -40,5 +41,9 @@ namespace Oparse
 			// Find next "non-delimiter"
 			pos = str.find_first_of(delimiters, lastPos);
 		}
+	}
+	bool StringContains(const string & str, const string lookFor)
+	{
+		return (str.find(lookFor) != string::npos);
 	}
 }

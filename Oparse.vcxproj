@@ -43,6 +43,8 @@
     <ClInclude Include="include\OpInt.h" />
     <ClInclude Include="include\OpList.h" />
     <ClInclude Include="include\OpMixedList.h" />
+    <ClInclude Include="include\OpModel.h" />
+    <ClInclude Include="include\OpModelValue.h" />
     <ClInclude Include="include\OpStdLibs.h" />
     <ClInclude Include="include\OpString.h" />
     <ClInclude Include="include\OpValidator.h" />
@@ -53,6 +55,7 @@
     <ClInclude Include="include\StringOps.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\OpModelValue.cpp" />
     <ClCompile Include="src\Oparse.cpp" />
     <ClCompile Include="src\OpBool.cpp" />
     <ClCompile Include="src\OpDouble.cpp" />

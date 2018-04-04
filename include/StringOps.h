@@ -14,4 +14,6 @@ namespace Oparse
 
 	void SplitString(const string &str, vector<string> &OUT_result, const string &delimiters);
 
+	bool StringContains(const string &str, const string lookFor);
+
 }
