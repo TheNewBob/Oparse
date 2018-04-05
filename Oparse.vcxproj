@@ -39,12 +39,12 @@
     <ClInclude Include="include\Oparse.h" />
     <ClInclude Include="include\OpBool.h" />
     <ClInclude Include="include\OpDouble.h" />
+    <ClInclude Include="include\OpFiles.h" />
     <ClInclude Include="include\OpFloat.h" />
     <ClInclude Include="include\OpInt.h" />
     <ClInclude Include="include\OpList.h" />
     <ClInclude Include="include\OpMixedList.h" />
     <ClInclude Include="include\OpModel.h" />
-    <ClInclude Include="include\OpModelValue.h" />
     <ClInclude Include="include\OpStdLibs.h" />
     <ClInclude Include="include\OpString.h" />
     <ClInclude Include="include\OpValidator.h" />
@@ -55,11 +55,11 @@
     <ClInclude Include="include\StringOps.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\OpModelValue.cpp" />
     <ClCompile Include="src\Oparse.cpp" />
     <ClCompile Include="src\OpBool.cpp" />
     <ClCompile Include="src\OpDouble.cpp" />
     <ClCompile Include="src\OpFactories.cpp" />
+    <ClCompile Include="src\OpFiles.cpp" />
     <ClCompile Include="src\OpFloat.cpp" />
     <ClCompile Include="src\OpInt.cpp" />
     <ClCompile Include="src\OpList.cpp" />

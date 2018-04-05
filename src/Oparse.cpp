@@ -24,28 +24,12 @@ namespace Oparse
 	}
 
 
-	OpValue *GetParamFromMapping(const string key, const OpModelDef &mapping, vector<string> blocks)
+	OpValue *GetParamFromMapping(const string key, const OpModelDef &mapping)
 	{
 		auto it = mapping.find(key);
 		if (it != mapping.end())
 		{
 			return it->second.first;
-		}
-		else
-		{
-			//see if the parameter is in a deeper block
-			for (unsigned int i = blocks.size(); i > 0; --i)
-			{
-				auto block = mapping.find(blocks[i - 1]);
-				if (block != mapping.end())
-				{
-					auto *model = dynamic_cast<OpModelValue*>(block->second.first);
-					if (model != NULL)
-					{
-						return GetParamFromMapping(key, model->GetModelDef(), blocks);
-					}
-				}
-			}
 		}
 		return NULL;
 	}
@@ -65,65 +49,98 @@ namespace Oparse
 		}
 	}
 
-	void parseLine(const string line, OpModelDef &mapping, PARSINGRESULT &result, vector<string> &blocks)
+	void parseBlock(OpFile *file, OpModelDef &mapping, PARSINGRESULT &result)
 	{
-		string l = line;
-		// remove comments, i.e. everything left of a ;, as well as leading and trailing whitespace
-		if (l.find_first_of(';') != std::string::npos)
-			l.erase(line.find_first_of(';'), std::string::npos);
-		l = RemoveExtraWhiteSpace(l);
+		string l;
+		bool endOfBlock = false;
+		string blockList = "";
 
-		if (l != "")
+		while (file->NextLine(l) && !endOfBlock)
 		{
-			string value = "";
-			
-			// Check if this is the beginning of a block, otherwise try to split the line into param and value.
-			if (l.compare(0, 6,"BEGIN_") == 0)
-			{
-				// this is the start of a block. read the block name and continue.
-				blocks.push_back(l.substr(6, l.length()));
-			}
-			else if (l.compare(0, 4, "END_") == 0)
-			{
-				if (blocks.size() > 0)
-				{
+			string line = l;
+			// remove comments, i.e. everything left of a ;, as well as leading and trailing whitespace
+			if (line.find_first_of(';') != std::string::npos)
+				line.erase(line.find_first_of(';'), std::string::npos);
+			line = RemoveExtraWhiteSpace(line);
 
-					// magic to enable some syntactical sugar in the cfg (END_FOO closes block BEGIN_FOO BAR)
-					vector<string> paramTokens;
-					SplitString(l, paramTokens, "_ \t");
-					if (paramTokens.size() == 0 || paramTokens[1] != blocks.back().substr(0, paramTokens[1].length()))
+			if (line != "")
+			{
+
+				// Check if this is the beginning of a block
+				if (line.compare(0, 6, "BEGIN_") == 0)
+				{
+					if (blockList != "")
 					{
-						stringstream msg;
-						msg << "Unexpected end of block: " << l << ". Expected END_" << blocks.back() << "!";
-						result.AddError(blocks.back(), msg.str());
+						result.AddError(OP_GENERAL_ERROR, "Block nested in BlockList is not allowed: " + line + ", aborting!");
+						throw runtime_error("Abortied parsing due to fatal error!");
 					}
+					string blockname = line.substr(6, line.length());
+					auto parser = GetParamFromMapping(blockname, mapping);
+					if (parser != NULL)
+					{
+						auto model = dynamic_cast<OpModel*>(parser);
+						if (model != NULL)
+						{
+							// This block is a nested model. Recurse!
+							parseBlock(file, model->GetModelDef(), result);
+						}
+						else
+						{
+							// this block is merely a BlockList, which doesn't require recursion.
+							blockList = blockname;
+						}
+					}
+					else
+					{
+						// this is a block that is not mapped.
+						blockList = blockname;
+					}
+				}
+				// Check if this is the end of a block
+				else if (line.compare(0, 4, "END_") == 0)
+				{
+					if (blockList == "")
+					{
+						// The block we're currently recursing through has ended.
+						endOfBlock = true;
+					}
+					else
+					{
+						// magic to enable some syntactical sugar in the cfg (END_FOO closes block BEGIN_FOO BAR)
+						vector<string> paramTokens;
+						SplitString(line, paramTokens, "_ \t");
+						if (paramTokens.size() == 0 || paramTokens[1] != blockList.substr(0, paramTokens[1].length()))
+						{
+							result.AddError(blockList, "Unexpected end of block: " + line + ". Expected END_" + blockList + "!");
+						}
+						else
+						{
+							// reached end of current BlockList
+							blockList = "";
+						}
+					}
+				}
+				else
+				{
+					if (blockList == "")
+					{
+						// We're not inside a BlockList.
+						auto keyValue = splitParamAndValue(line);
+						OpValue *parser = GetParamFromMapping(keyValue.first, mapping);
+						parseParamValue(parser, keyValue.second, keyValue.first, result);
+					}
+					else
+					{
+						// Line contains no =, must be an item of a BlockList
+						OpValue *parser = GetParamFromMapping(blockList, mapping);
+						parseParamValue(parser, l, blockList, result);
+					}
+				}
 
-					// delete the last element of readingBlock, since the block has closed.
-					blocks.erase(blocks.begin() + (blocks.size() - 1));
-				}
-				else
-				{
-					result.AddError(OP_GENERAL_ERROR, "Unexpected end of block. No block has been opened!");
-				}
-			}
-			else
-			{
-				if (StringContains(l, "="))
-				{
-					// This is a normal parameter, not a BlockList
-					auto keyValue = splitParamAndValue(line);
-					OpValue *parser = GetParamFromMapping(keyValue.first, mapping, blocks);
-					parseParamValue(parser, keyValue.second, keyValue.first, result);
-				}
-				else
-				{
-					// Line contains no =, must be an item of a BlockList
-					OpValue *parser = GetParamFromMapping(blocks.back(), mapping, blocks);
-					parseParamValue(parser, l, blocks.back(), result);
-				}
 			}
 		}
 	}
+
 
 	void clearModelDef(OpModelDef &mapping)
 	{
@@ -160,79 +177,69 @@ namespace Oparse
 		}*/
 	}
 
+	void parseFile(OpFile *file, OpModelDef &mapping, PARSINGRESULT &result)
+	{
+		try
+		{
+			parseBlock(file, mapping, result);
+			validateParsedMap(mapping, result);
+			clearModelDef(mapping);
+		}
+		catch (runtime_error e)
+		{
+			result.AddError(OP_GENERAL_ERROR, e.what());
+		}
+	}
+
+
 #ifdef OPARSE_STANDALONE
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping)
 	{
 		PARSINGRESULT result;
-		ifstream file;
-		file.open(path);
-
-		if (!file.is_open())
+		try
 		{
-			stringstream ss;
-			ss << "Could not open file: " << path;
-			result.AddError(OP_GENERAL_ERROR, ss.str());
-			return result;
+			OpStandaloneFile *file = new OpStandaloneFile(path);
+			parseFile(file, mapping, result);
 		}
-		else
+		catch (runtime_error e)
 		{
-			string line;
-			vector<string> blocks;
-
-			while (getline(file, line))
-			{
-				parseLine(line, mapping, result, blocks);
-			}
-
-			if (blocks.size() > 0)
-			{
-				result.AddError(OP_GENERAL_ERROR, "Unexpected end of file. Some blocks have not been closed!");
-			}
-
+			result.AddError(OP_GENERAL_ERROR, e.what());
 		}
-
-		validateParsedMap(mapping, result);
-		clearModelDef(mapping);
 		return result;
 	}
 #else
 
-	void resetFile(FILEHANDLE file)
-	{
-		char l[500];
-		oapiReadItem_string(file, (char*)"Module", l);
-	}
 
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping, PathRoot root)
 	{
-		auto file = oapiOpenFile(path.data(), FILE_IN_ZEROONFAIL, root);
-		if (file == NULL)
-		{
-			PARSINGRESULT result;
-			stringstream ss;
-			ss << "Could not open file: " << path;
-			result.AddError(OP_GENERAL_ERROR, ss.str());
-			return result;
-		}
-		else
-		{
-			return ParseFile(file, mapping);
-		}
-	}
-
-	PARSINGRESULT ParseFile(FILEHANDLE file, OpModelDef &mapping)
-	{
 		PARSINGRESULT result;
-		resetFile(file);
-		char *l;
-		while (oapiReadScenario_nextline(file, l))
+		try
 		{
-			parseLine(l, mapping, result);
+			OpOrbiterFile *file = new OpOrbiterFile(path, root);
+			parseFile(file, mapping, result);
 		}
-		validateParsedMap(mapping, result);
-		clearModelDef(mapping);
+		catch (runtime_error e)
+		{
+			result.AddError(OP_GENERAL_ERROR, e.what());
+		}
 		return result;
 	}
+
+	PARSINGRESULT ParseFile(FILEHANDLE fileHandle, OpModelDef &mapping)
+	{
+		PARSINGRESULT result;
+		try
+		{
+			OpOrbiterFile *file = new OpOrbiterFile(fileHandle);
+			parseFile(file, mapping, result);
+		}
+		catch (runtime_error e)
+		{
+			result.AddError(OP_GENERAL_ERROR, e.what());
+		}
+		return result;
+	}
+
 #endif
 }
 

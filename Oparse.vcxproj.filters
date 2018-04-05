@@ -63,10 +63,10 @@
     <ClInclude Include="include\OpBlockList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\OpModelValue.h">
+    <ClInclude Include="include\OpModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\OpModel.h">
+    <ClInclude Include="include\OpFiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,7 +107,7 @@
     <ClCompile Include="src\OpMixedList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\OpModelValue.cpp">
+    <ClCompile Include="src\OpFiles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

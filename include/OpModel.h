@@ -6,12 +6,17 @@ typedef vector<Oparse::OpValue*> OpValues;
 namespace Oparse
 {
 	/**
-	* \brief Interface for models.
-	* Inherit this class and return your mapping in an override of GetModelDef().
+	* \brief Base class for models.
+	* Inherit this class and pass your mapping to the constructor.
 	*/
 	class OpModel
+		: public OpValue
 	{
 	public:
-		virtual OpModelDef GetModelDef() = 0;
+		OpModel(OpModelDef mapping) : mapping(mapping) {};
+		OpModelDef &GetModelDef() { return mapping; };
+	private:
+		void ParseValue(string value) { throw runtime_error("OpModel::ParseValue() should never be called!"); };
+		OpModelDef mapping;
 	};
 }
