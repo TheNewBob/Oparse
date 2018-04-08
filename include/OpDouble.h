@@ -10,7 +10,7 @@ namespace Oparse
 		OpDouble(double &receiver);
 		~OpDouble();
 
-		void ParseValue(string value);
+		void ParseValue(string key, string value, PARSINGRESULT &result);
 
 	private:
 		double &receiver;

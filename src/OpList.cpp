@@ -1,4 +1,5 @@
 #include "OpStdLibs.h"
+#include "PARSINGRESULT.h"
 #include "OpValue.h"
 #include "OpInt.h"
 #include "OpFloat.h"
@@ -60,7 +61,7 @@ namespace Oparse
 		type(T_VECTOR3)
 	{}
 
-	void OpList::ParseValue(string value)
+	void OpList::ParseValue(string key, string value, PARSINGRESULT &result)
 	{
 		vector<string> elements;
 		SplitString(value, elements, delimiter);
@@ -71,45 +72,48 @@ namespace Oparse
 			{
 				int temp = -1;
 				OpInt parser(temp);
-				parser.ParseValue(elements[i]);
+				parser.ParseValue(key, elements[i], result);
 				((vector<int>*)receiver)->push_back(temp);
 			}
 			else if (type == T_FLOAT)
 			{
 				float temp = -1;
 				OpFloat parser(temp);
-				parser.ParseValue(elements[i]);
+				parser.ParseValue(key, elements[i], result);
 				((vector<float>*)receiver)->push_back(temp);
 			}
 			else if (type == T_DOUBLE)
 			{
 				double temp = -1;
 				OpDouble parser(temp);
-				parser.ParseValue(elements[i]);
+				parser.ParseValue(key, elements[i], result);
 				((vector<double>*)receiver)->push_back(temp);
 			}
 			else if (type == T_BOOL)
 			{
 				bool temp = false;
 				OpBool parser(temp);
-				parser.ParseValue(elements[i]);
+				parser.ParseValue(key, elements[i], result);
 				((vector<bool>*)receiver)->push_back(temp);
 			}
 			else if (type == T_STRING)
 			{
 				string temp = "";
 				OpString parser(temp);
-				parser.ParseValue(elements[i]);
+				parser.ParseValue(key, elements[i], result);
 				((vector<string>*)receiver)->push_back(temp);
 			}
 			else if (type == T_VECTOR3)
 			{
 				VECTOR3 temp;
 				OpVector3 parser(temp);
-				parser.ParseValue(elements[i]);
+				parser.ParseValue(key, elements[i], result);
 				((vector<VECTOR3>*)receiver)->push_back(temp);
 			}
-			else throw runtime_error("Error while parsing OpList: Unsupported type!");
+			else
+			{
+				result.AddError(key, "Error while parsing OpList: Unsupported type!");
+			}
 		}
 	}
 }

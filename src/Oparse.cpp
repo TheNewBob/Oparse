@@ -34,21 +34,6 @@ namespace Oparse
 		return NULL;
 	}
 
-	void parseParamValue(OpValue *parser, const string value, const string key, PARSINGRESULT &result)
-	{
-		if (parser != NULL)
-		{
-			try
-			{
-				parser->ParseValue(value);
-			}
-			catch (exception e)
-			{
-				result.AddError(key, e.what());
-			}
-		}
-	}
-
 	void parseBlock(OpFile *file, OpModelDef &mapping, PARSINGRESULT &result)
 	{
 		string l;
@@ -78,6 +63,7 @@ namespace Oparse
 					auto parser = GetParamFromMapping(blockname, mapping);
 					if (parser != NULL)
 					{
+						// check if this is a nested model
 						auto model = dynamic_cast<OpModel*>(parser);
 						if (model != NULL)
 						{
@@ -86,8 +72,17 @@ namespace Oparse
 						}
 						else
 						{
-							// this block is merely a BlockList, which doesn't require recursion.
-							blockList = blockname;
+							//check if this is a model factory
+							auto modelFactory = dynamic_cast<OpModelFactoryFacade*>(parser);
+							if (modelFactory != NULL)
+							{
+								parseBlock(file, modelFactory->CreateNewModel()->GetModelDef(), result);
+							}
+							else
+							{
+								// this block is merely a BlockList, which doesn't require recursion.
+								blockList = blockname;
+							}
 						}
 					}
 					else
@@ -127,13 +122,15 @@ namespace Oparse
 						// We're not inside a BlockList.
 						auto keyValue = splitParamAndValue(line);
 						OpValue *parser = GetParamFromMapping(keyValue.first, mapping);
-						parseParamValue(parser, keyValue.second, keyValue.first, result);
+						if (parser != NULL)
+							parser->ParseValue(keyValue.first, keyValue.second, result);
 					}
 					else
 					{
 						// Line contains no =, must be an item of a BlockList
 						OpValue *parser = GetParamFromMapping(blockList, mapping);
-						parseParamValue(parser, l, blockList, result);
+						if (parser != NULL)
+							parser->ParseValue(blockList, line, result);
 					}
 				}
 

@@ -1,6 +1,8 @@
 //#define OPARSE_STANDALONE
 #include "OpStdLibs.h"
 #include "Oparse.h"
+#include "NestedModel.h"
+#include "MyModel.h"
 
 using namespace Oparse;
 
@@ -40,7 +42,8 @@ int main()
 
 	MixedListDemo mixedList;
 	vector<MixedListDemo*> blockDemo;
-
+	
+	MyModel myModel;
 	
 
 	vector<string>() = {};
@@ -52,13 +55,14 @@ int main()
 		{ "makesSense",{ _Bool(makesSense),{} } },
 		{ "vector3", { _Vector3(vector3), {} } },
 		{ "isNotHere",{ _Bool(isNotHere),{ _REQUIRED() } } },
-		{ "intList", { _LIST(intList), {} } },
-		{ "floatList", { _LIST(floatList), {} } },
-		{ "boolList",{ _LIST(boolList),{} } },
-		{ "stringList",{ _LIST(stringList, "#"),{} } },
-		{ "vector3List", { _LIST(vector3List), {} } },
+		{ "intList", { _List(intList), {} } },
+		{ "floatList", { _List(floatList), {} } },
+		{ "boolList",{ _List(boolList),{} } },
+		{ "stringList",{ _List(stringList, "#"),{} } },
+		{ "vector3List", { _List(vector3List), {} } },
 		{ "mixedList", { mixedList.GetMapping(), {} } },
-		{ "BLOCKLIST 1", { _Block<MixedListDemo>(blockDemo), {} } }
+		{ "BLOCKLIST 1", { _Block<MixedListDemo>(blockDemo), {} } },
+		{ "MODEL 1", { &myModel, {} } }
 	};
 
 	auto result = Oparse::ParseFile(

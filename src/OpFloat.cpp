@@ -1,4 +1,5 @@
 #include "OpStdLibs.h"
+#include "PARSINGRESULT.h"
 #include "OpValue.h"
 #include "OpFloat.h"
 
@@ -14,9 +15,16 @@ namespace Oparse
 	{
 	}
 
-	void OpFloat::ParseValue(string value)
+	void OpFloat::ParseValue(string key, string value, PARSINGRESULT &result)
 	{
-		receiver = stof(value);
-		setParsed();
+		try
+		{
+			receiver = stof(value);
+			setParsed();
+		}
+		catch (exception)
+		{
+			result.AddError(key, "Type mismatch: Unable to convert \"" + value + "\" to float!");
+		}
 	}
 }

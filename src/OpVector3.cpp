@@ -1,4 +1,5 @@
 #include "OpStdLibs.h"
+#include "PARSINGRESULT.h"
 #include "StringOps.h"
 #include "OpValue.h"
 #include "OpVector3.h"
@@ -9,13 +10,26 @@ namespace Oparse
 	{
 	}
 
-	void OpVector3::ParseValue(string value)
+	void OpVector3::ParseValue(string key, string value, PARSINGRESULT &result)
 	{
-		vector<string> elements;
-		SplitString(value, elements, " ");
-		if (elements.size() != 3) throw runtime_error("VECTOR3 cannot have more or less than 3 elements!");
-		receiver.x = stod(elements[0]);
-		receiver.y = stod(elements[1]);
-		receiver.z = stod(elements[2]);
+		try
+		{
+			vector<string> elements;
+			SplitString(value, elements, " ");
+			if (elements.size() != 3)
+			{
+				result.AddError(key, "VECTOR3 cannot have more or less than 3 elements!");
+			}
+			else
+			{
+				receiver.x = stod(elements[0]);
+				receiver.y = stod(elements[1]);
+				receiver.z = stod(elements[2]);
+			}
+		}
+		catch (exception)
+		{
+			result.AddError(key, "Type mismatch: Unable to convert \"" + value + "\" to VECTOR3!");
+		}
 	}
 }

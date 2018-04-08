@@ -9,7 +9,7 @@ namespace Oparse
 		OpString(string &receiver, bool toLower = false);
 		~OpString();
 
-		void ParseValue(string value);
+		void ParseValue(string key, string value, PARSINGRESULT &result);
 
 	private:
 		string & receiver;

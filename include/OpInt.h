@@ -10,7 +10,7 @@ namespace Oparse
 		OpInt(int &receiver);
 		~OpInt();
 
-		void ParseValue(string value);
+		void ParseValue(string key, string value, PARSINGRESULT &result);
 
 	private:
 		int &receiver;

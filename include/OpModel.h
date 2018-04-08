@@ -15,8 +15,9 @@ namespace Oparse
 	public:
 		OpModel(OpModelDef mapping) : mapping(mapping) {};
 		OpModelDef &GetModelDef() { return mapping; };
+
 	private:
-		void ParseValue(string value) { throw runtime_error("OpModel::ParseValue() should never be called!"); };
+		void ParseValue(string key, string value, PARSINGRESULT &result) { throw runtime_error("OpModel::ParseValue() should never be called!"); };
 		OpModelDef mapping;
 	};
 }

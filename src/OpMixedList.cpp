@@ -17,17 +17,21 @@ namespace Oparse
 		receivers.clear();
 	}
 
-	void Oparse::OpMixedList::ParseValue(string value)
+	void Oparse::OpMixedList::ParseValue(string key, string value, PARSINGRESULT &result)
 	{
 		vector<string> elements;
 		SplitString(value, elements, delimiter);
 		if (elements.size() != receivers.size())
-			throw runtime_error("MixedList formatting error: number of elements in file does not match number of mapped elements!");
-
-		for (unsigned int i = 0; i < elements.size(); ++i)
 		{
-			receivers[i]->ParseValue(elements[i]);
+			result.AddError(key, "MixedList formatting error: number of elements in file does not match number of mapped elements!");
 		}
-		setParsed();
+		else
+		{
+			for (unsigned int i = 0; i < elements.size(); ++i)
+			{
+				receivers[i]->ParseValue(key, elements[i], result);
+			}
+			setParsed();
+		}
 	}
 }

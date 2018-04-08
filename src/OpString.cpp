@@ -1,4 +1,5 @@
 #include "OpStdLibs.h"
+#include "PARSINGRESULT.h"
 #include "StringOps.h"
 #include "OpValue.h"
 #include "OpString.h"
@@ -13,16 +14,23 @@ namespace Oparse
 	{
 	}
 
-	void OpString::ParseValue(string value)
+	void OpString::ParseValue(string key, string value, PARSINGRESULT &result)
 	{
-		if (toLower)
+		try
 		{
-			receiver = Oparse::StringToLower(value);
+			if (toLower)
+			{
+				receiver = Oparse::StringToLower(value);
+			}
+			else
+			{
+				receiver = value;
+			}
+			setParsed();
 		}
-		else
+		catch (exception)
 		{
-			receiver = value;
+			result.AddError(key, "Type mismatch: Unable to convert \"" + value + "\" to string!");
 		}
-		setParsed();
 	}
 }

@@ -11,21 +11,21 @@ namespace Oparse
 		OpBlockList<T>(vector<T*> &receiver) : receiver(vector<T>()), ptrReceiver(receiver), ptrs(true) {};
 		~OpBlockList() {};
 
-		void ParseValue(string value)
+		void ParseValue(string key, string value, PARSINGRESULT &result)
 		{
 			if (ptrs)
 			{
 				//allocate new objects as pointers
 				T *newItem = new T;
 				OpMixedList *mapping = newItem->GetMapping();
-				mapping->ParseValue(value);
+				mapping->ParseValue(key, value, result);
 				ptrReceiver.push_back(newItem);
 			}
 			else
 			{
 				T newItem;
 				OpMixedList *mapping = newItem.GetMapping();
-				mapping->ParseValue(value);
+				mapping->ParseValue(key, value, result);
 				receiver.push_back(newItem);
 			}
 			setParsed();

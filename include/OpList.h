@@ -19,7 +19,7 @@ namespace Oparse
 		OpList(vector<VECTOR3> &receiver, string delimiter = ",");
 		~OpList() {};
 
-		void ParseValue(string value);
+		void ParseValue(string key, string value, PARSINGRESULT &result);
 
 	private:
 		void *receiver;

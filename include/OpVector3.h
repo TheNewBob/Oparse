@@ -19,7 +19,7 @@ namespace Oparse
 		OpVector3(VECTOR3 &receiver);
 		~OpVector3() {};
 
-		void ParseValue(string value);
+		void ParseValue(string key, string value, PARSINGRESULT &result);
 
 	private:
 		VECTOR3 &receiver;

@@ -35,32 +35,32 @@ namespace Oparse
 		return new OpVector3(receiver);
 	}
 
-	OpList *_LIST(vector<int>& receiver, string delimiter)
+	OpList *_List(vector<int>& receiver, string delimiter)
 	{
 		return new OpList(receiver, delimiter);
 	}
 
-	OpList *_LIST(vector<float>& receiver, string delimiter)
+	OpList *_List(vector<float>& receiver, string delimiter)
 	{
 		return new OpList(receiver, delimiter);
 	}
 
-	OpList *_LIST(vector<double>& receiver, string delimiter)
+	OpList *_List(vector<double>& receiver, string delimiter)
 	{
 		return new OpList(receiver, delimiter);
 	}
 
-	OpList *_LIST(vector<bool>& receiver, string delimiter)
+	OpList *_List(vector<bool>& receiver, string delimiter)
 	{
 		return new OpList(receiver, delimiter);
 	}
 
-	OpList *_LIST(vector<string>& receiver, string delimiter)
+	OpList *_List(vector<string>& receiver, string delimiter)
 	{
 		return new OpList(receiver, delimiter);
 	}
 
-	OpList *_LIST(vector<VECTOR3>& receiver, string delimiter)
+	OpList *_List(vector<VECTOR3>& receiver, string delimiter)
 	{
 		return new OpList(receiver, delimiter);
 	}

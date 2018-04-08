@@ -9,7 +9,7 @@ namespace Oparse
 		OpBool(bool &receiver);
 		~OpBool();
 
-		void ParseValue(string value);
+		void ParseValue(string key, string value, PARSINGRESULT &result);
 
 	private:
 		bool &receiver;

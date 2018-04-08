@@ -10,15 +10,17 @@ class MyModel
 public:
 	MyModel() : OpModel(
 		OpModelDef() = {
-			{ "blockParam1",{ _Double(blockParam1),{} } },
-			{ "blockParam2",{ _String(blockParam2),{} } },
-			{ "blockParam3",{ _List(blockParam3),{} } }
+			{ "param1",{ _Double(param1),{} } },
+			{ "param2",{ _Bool(param2),{} } },
+			{ "param3",{ _List(param3),{} } },
+			{ "NESTED MODEL 1", { &nestedModel, {} } }
 		}) {};
 
-		~MyModel() {};
+	~MyModel() {};
 
-	double blockParam1 = 0;
-	string blockParam2 = "";
-	vector<int> blockParam3;
+	double param1 = 0;
+	bool param2 = false;
+	vector<int> param3;
+	NestedModel nestedModel;
 };
 

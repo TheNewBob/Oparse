@@ -10,7 +10,7 @@ namespace Oparse
 		OpFloat(float &receiver);
 		~OpFloat();
 
-		void ParseValue(string value);
+		void ParseValue(string key, string value, PARSINGRESULT &result);
 
 	private:
 		float &receiver;

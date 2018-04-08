@@ -12,7 +12,7 @@ namespace Oparse
 		OpMixedList(vector<OpValue*> receivers, string delimiter = "\t");
 		~OpMixedList();
 
-		virtual void ParseValue(string value);
+		virtual void ParseValue(string key, string value, PARSINGRESULT &result);
 
 	private:
 		vector<OpValue*> receivers;

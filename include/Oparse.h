@@ -16,7 +16,7 @@
 #include "OpMixedList.h"
 #include "OpBlockList.h"
 #include "OpModel.h"
-
+#include "OpModelFactory.h"
 #include "OpFiles.h"
 #include "OpvRequired.h"
 
@@ -35,16 +35,16 @@ namespace Oparse
 	OpString *_String(string &receiver);
 	OpBool *_Bool(bool &receiver);
 	OpVector3 *_Vector3(VECTOR3 &receiver);
-	OpList *_LIST(vector<int> &receiver, string delimiter = ",\t");
-	OpList *_LIST(vector<float> &receiver, string delimiter = ",\t");
-	OpList *_LIST(vector<double> &receiver, string delimiter = ",\t");
-	OpList *_LIST(vector<bool> &receiver, string delimiter = ",\t");
-	OpList *_LIST(vector<string> &receiver, string delimiter = ",\t");
-	OpList *_LIST(vector<VECTOR3> &receiver, string delimiter = ",\t");
+	OpList *_List(vector<int> &receiver, string delimiter = ",\t");
+	OpList *_List(vector<float> &receiver, string delimiter = ",\t");
+	OpList *_List(vector<double> &receiver, string delimiter = ",\t");
+	OpList *_List(vector<bool> &receiver, string delimiter = ",\t");
+	OpList *_List(vector<string> &receiver, string delimiter = ",\t");
+	OpList *_List(vector<VECTOR3> &receiver, string delimiter = ",\t");
 	OpMixedList *_MixedList(OpValues receivers, string delimiter = "\t");
 	template <typename T> OpBlockList<T> *_Block(vector<T> &receiver) { return new OpBlockList<T>(receiver); };
 	template <typename T> OpBlockList<T> *_Block(vector<T*> &receiver) { return new OpBlockList<T>(receiver); };
-
+	template <typename T, typename U = T> OpModelFactory<T, U> *_ModelFactory(vector<U*> &receiver) { return new OpModelFactory<T, U>(receiver); };
 	//validator factories
 	OpvRequired *_REQUIRED();
 

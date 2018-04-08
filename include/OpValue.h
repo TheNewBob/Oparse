@@ -2,6 +2,7 @@
 
 namespace Oparse
 {
+
 	class OpValue
 	{
 	public:
@@ -12,7 +13,7 @@ namespace Oparse
 		 * \brief Attempts to parse the string into an appropriate value and set it in the model.
 		 * \throws if no sense could be made of the value (usually because it's of the wrong type).
 		 */
-		virtual void ParseValue(string value) = 0;
+		virtual void ParseValue(string key, string value, PARSINGRESULT &result) = 0;
 		
 		/**
 		 * \return True if this value was parsed, false if not.
