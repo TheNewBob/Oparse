@@ -45,7 +45,6 @@
     <ClInclude Include="include\OpList.h" />
     <ClInclude Include="include\OpMixedList.h" />
     <ClInclude Include="include\OpModel.h" />
-    <ClInclude Include="include\OpModelFactory.h" />
     <ClInclude Include="include\OpStdLibs.h" />
     <ClInclude Include="include\OpString.h" />
     <ClInclude Include="include\OpValidator.h" />

@@ -62,7 +62,7 @@ int main()
 		{ "vector3List", { _List(vector3List), {} } },
 		{ "mixedList", { mixedList.GetMapping(), {} } },
 		{ "BLOCKLIST 1", { _Block<MixedListDemo>(blockDemo), {} } },
-		{ "MODEL 1", { &myModel, {} } }
+		{ "MODEL 1", { _Model<MyModel>(myModel), {} } }
 	};
 
 	auto result = Oparse::ParseFile(

@@ -42,5 +42,4 @@ namespace Oparse
 		map<string, vector<string>> warnings;
 
 	};
-
 }

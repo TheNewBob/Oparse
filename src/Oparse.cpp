@@ -34,7 +34,7 @@ namespace Oparse
 		return NULL;
 	}
 
-	void parseBlock(OpFile *file, OpModelDef &mapping, PARSINGRESULT &result)
+	void ParseBlock(OpFile *file, OpModelDef &mapping, PARSINGRESULT &result)
 	{
 		string l;
 		bool endOfBlock = false;
@@ -63,26 +63,17 @@ namespace Oparse
 					auto parser = GetParamFromMapping(blockname, mapping);
 					if (parser != NULL)
 					{
-						// check if this is a nested model
-						auto model = dynamic_cast<OpModel*>(parser);
-						if (model != NULL)
+						// check if this is a nested value (model or modelfactory)
+						auto nestable = dynamic_cast<OpNestable*>(parser);
+						if (nestable != NULL)
 						{
-							// This block is a nested model. Recurse!
-							parseBlock(file, model->GetModelDef(), result);
+							// This block is a nested model. 
+							nestable->ParseValue(file, result);
 						}
 						else
 						{
-							//check if this is a model factory
-							auto modelFactory = dynamic_cast<OpModelFactoryFacade*>(parser);
-							if (modelFactory != NULL)
-							{
-								parseBlock(file, modelFactory->CreateNewModel()->GetModelDef(), result);
-							}
-							else
-							{
-								// this block is merely a BlockList, which doesn't require recursion.
-								blockList = blockname;
-							}
+							// this block is merely a BlockList, which doesn't require recursion.
+							blockList = blockname;
 						}
 					}
 					else
@@ -141,7 +132,7 @@ namespace Oparse
 
 	void clearModelDef(OpModelDef &mapping)
 	{
-/*		for (auto param = mapping.begin(); param != mapping.end(); ++param)
+		for (auto param = mapping.begin(); param != mapping.end(); ++param)
 		{
 			OpValue *value = param->second.first;
 			vector<OpValidator*> validators = param->second.second;
@@ -154,7 +145,7 @@ namespace Oparse
 			}
 			validators.clear();
 		}
-		mapping.clear();*/
+		mapping.clear();
 	}
 
 	/**
@@ -162,7 +153,7 @@ namespace Oparse
 	 */
 	void validateParsedMap(OpModelDef &mapping, PARSINGRESULT &result)
 	{
-/*		for (auto param = mapping.begin(); param != mapping.end(); ++param)
+		for (auto param = mapping.begin(); param != mapping.end(); ++param)
 		{
 			// walk through all validators for each value. 
 			OpValue *value = param->second.first;
@@ -171,14 +162,20 @@ namespace Oparse
 			{
 				(*validator)->Validate(value, param->first, result);
 			}
-		}*/
+			// check if this is a nested value
+			auto nestedValue = dynamic_cast<OpNestable*>(value);
+			if (nestedValue != NULL)
+			{
+				nestedValue->Validate(result);
+			}
+		}
 	}
 
 	void parseFile(OpFile *file, OpModelDef &mapping, PARSINGRESULT &result)
 	{
 		try
 		{
-			parseBlock(file, mapping, result);
+			ParseBlock(file, mapping, result);
 			validateParsedMap(mapping, result);
 			clearModelDef(mapping);
 		}

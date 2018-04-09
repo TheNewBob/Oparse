@@ -69,9 +69,6 @@
     <ClInclude Include="include\OpFiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\OpModelFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Oparse.cpp">

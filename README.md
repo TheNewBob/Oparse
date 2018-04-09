@@ -50,19 +50,16 @@ What's a parsing library without lists? Pretty useless, that's what it is. So Op
 
 __models__
 
-Actual model mapping (that is, the automatic binding of values to fields of a class) work based on inheritance.
-You create a class that inherits OpModel, and you pass the mapping for your fields to the base baseclass in your constructor.
-The base class is really just needed for unambiguous identification and contains almost no code, so don't worry about this bogging down your data classes.
-There is no quick factory for OpModel, since you'r generally expected to have an instance ready.
+To map an actual model (i.e. an entire class), you need the OpModel. It takes the type of your model as a type argument, 
+as well as a reference to an instance of your model as usual. The model can be a class or struct, and the only condition to qualify it
+as a bindable model is that it provides a method with the signature OpModelDef GetModelDef(), similar to a BlockList.
+Needless to say, this method is where you should create and return your bindings. You can use the _Model factory for quick mapping.
 
-Models are fully nestable. A field of one of your models can be another model, and as long as the key you give it matches the proper BEGIN_ block in the cfg
-and you map a pointer to your nested instance to it, the binding will work without any further code from your side.
+Models are recursively nestable. A field of one of your models can be another model, and as long as the key you give it matches the proper BEGIN_ block in the cfg
+and the nested model provides its own bindings via a GetModelDef() method, the binding will work without any further code from your side.
 
-However, when things get really wild, you might not even _know_ which blocks will be declared in the config. Rather, you want to define the propperties of your vessel
-based on the blocks that are declared.
-For this extreme case, Oparse offers the OpModelFactory, a generic class that will _instantiate_ a model of the passed class and add it to a vector you pass it.
-Kind of similar to what the BlockList does, just that it does it with whole models. OpModelFactories can be created with the _ModelFactory<T, U>(vector<U*>) quick factory,
-in which T is the type of the model to be instantiated, and U is the type of the vector to receive it, so you can use polymorphic models with this.
+Sometimes, However, things get really wild, and you do not even _know_ which blocks will be declared in the config. Rather, you want to define the propperties of your vessel based on the blocks that are declared and instantiate a model of the appropriate type if a certain block is there, and do nothing otherwise.  
+For this (admittedly extreme) case, Oparse offers the OpModelFactory, a generic class that will _instantiate_ a model of the passed class and add it to a vector you pass it. Kind of similar to what the BlockList does, just that it does it with whole models. OpModelFactories can be created with the _ModelFactory<T, U>(vector<U*>) quick factory, in which T is the type of the model to be instantiated, and U is the type of the vector to receive it, so you can use polymorphic models with this.
 
 
  ### Validators
