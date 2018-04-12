@@ -30,24 +30,27 @@ namespace Oparse
 
 	OpOrbiterFile::OpOrbiterFile(string filename, PathRoot root)
 	{
-		file = oapiOpenFile(path.data(), FILE_IN_ZEROONFAIL, root);
+		file = oapiOpenFile(filename.data(), FILE_IN_ZEROONFAIL, root);
 		if (file == NULL) throw runtime_error("Could not open file: " + filename);
 	}
 
-	OpOrbiterFile::OpOrbiterFile(FILEHANDLE file) file(file)
+	OpOrbiterFile::OpOrbiterFile(FILEHANDLE file): file(file)
 	{
-		resetFile(file);
+		resetFile();
 	}
 
 	bool OpOrbiterFile::NextLine(string &OUT_line)
 	{
 		char *l;
-		auto result = oapiReadScenario_nextline(file, l);
-		OUT_line = l;
+		bool result = oapiReadScenario_nextline(file, l);
+		if (result) 
+		{
+			OUT_line = l;
+		}
 		return result;
 	}
 
-	OpOrbiterFile::resetFile()
+	void OpOrbiterFile::resetFile()
 	{
 		char l[500];
 		oapiReadItem_string(file, (char*)"Module", l);

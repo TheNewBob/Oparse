@@ -35,7 +35,7 @@ namespace Oparse
 		bool NextLine(string &OUT_line);
 
 	private:
-		resetFile();
+		void resetFile();
 		FILEHANDLE file = NULL;
 	};
 

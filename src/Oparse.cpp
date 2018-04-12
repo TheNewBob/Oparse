@@ -12,7 +12,8 @@
 
 namespace Oparse
 {
-	const string OP_GENERAL_ERROR = "OP_GENERAL";
+	const string OP_GENERAL_ERROR = "OP_GENERAL_ERROR";
+	const string DO_NOT_PARSE = "$DO_NOT_PARSE$";
 
 	pair<string, string> splitParamAndValue(const string &configline)
 	{
@@ -20,13 +21,27 @@ namespace Oparse
 		SplitString(configline, tokens, "=");
 		string key = RemoveExtraWhiteSpace(tokens[0]);
 		string value = tokens.size() > 1 ? RemoveExtraWhiteSpace(tokens[1]) : "";
-		return make_pair(key, value);
+		return make_pair(StringToLower(key), value);
+	}
+
+	void MakeMappingKeysLowerCase(OpModelDef &mapping)
+	{
+		OpModelDef newMapping;
+		for (auto i = mapping.begin(); i != mapping.end(); ++i)
+		{
+			auto value = i->second;
+			auto key = StringToLower(i->first);
+			newMapping[key] = value;
+		}
+		mapping.clear();
+		mapping = newMapping;
 	}
 
 
 	OpValue *GetParamFromMapping(const string key, const OpModelDef &mapping)
 	{
-		auto it = mapping.find(key);
+		auto lowercaseKey = StringToLower(key);
+		auto it = mapping.find(lowercaseKey);
 		if (it != mapping.end())
 		{
 			return it->second.first;
@@ -39,27 +54,28 @@ namespace Oparse
 		string l;
 		bool endOfBlock = false;
 		string blockList = "";
+		
+		MakeMappingKeysLowerCase(mapping);
 
 		while (file->NextLine(l) && !endOfBlock)
 		{
-			string line = l;
 			// remove comments, i.e. everything left of a ;, as well as leading and trailing whitespace
-			if (line.find_first_of(';') != std::string::npos)
-				line.erase(line.find_first_of(';'), std::string::npos);
-			line = RemoveExtraWhiteSpace(line);
+			if (l.find_first_of(';') != std::string::npos)
+				l.erase(l.find_first_of(';'), std::string::npos);
+			l = RemoveExtraWhiteSpace(l);
 
-			if (line != "")
+			if (l != "")
 			{
-
+				string lowercaseLine = StringToLower(l);
 				// Check if this is the beginning of a block
-				if (line.compare(0, 6, "BEGIN_") == 0)
+				if (lowercaseLine.compare(0, 6, "begin_") == 0 && !StringBeginsWith(blockList, DO_NOT_PARSE))
 				{
 					if (blockList != "")
 					{
-						result.AddError(OP_GENERAL_ERROR, "Block nested in BlockList is not allowed: " + line + ", aborting!");
-						throw runtime_error("Abortied parsing due to fatal error!");
+						result.AddError(OP_GENERAL_ERROR, "Block nested in BlockList is not allowed: " + l + ", aborting!");
+						throw runtime_error("Aborted parsing due to fatal error!");
 					}
-					string blockname = line.substr(6, line.length());
+					string blockname = lowercaseLine.substr(6, lowercaseLine.length());
 					auto parser = GetParamFromMapping(blockname, mapping);
 					if (parser != NULL)
 					{
@@ -79,11 +95,11 @@ namespace Oparse
 					else
 					{
 						// this is a block that is not mapped.
-						blockList = blockname;
+						blockList = DO_NOT_PARSE + blockname;
 					}
 				}
 				// Check if this is the end of a block
-				else if (line.compare(0, 4, "END_") == 0)
+				else if (lowercaseLine.compare(0, 4, "end_") == 0)
 				{
 					if (blockList == "")
 					{
@@ -94,10 +110,24 @@ namespace Oparse
 					{
 						// magic to enable some syntactical sugar in the cfg (END_FOO closes block BEGIN_FOO BAR)
 						vector<string> paramTokens;
-						SplitString(line, paramTokens, "_ \t");
-						if (paramTokens.size() == 0 || paramTokens[1] != blockList.substr(0, paramTokens[1].length()))
+						SplitString(lowercaseLine, paramTokens, "_ \t");
+						if (paramTokens.size() == 0)
 						{
-							result.AddError(blockList, "Unexpected end of block: " + line + ". Expected END_" + blockList + "!");
+							result.AddError(blockList, "END_ without block specifier!");
+						}
+						else if (StringBeginsWith(blockList, DO_NOT_PARSE))
+						{
+							auto beginingOfName = DO_NOT_PARSE.length();
+							auto endOfName = beginingOfName + paramTokens[1].length();
+							if (blockList.compare(beginingOfName, endOfName, paramTokens[1]) == 0)
+							{
+								// A block that is not mapped has ended
+								blockList = "";
+							}
+						}
+						else if (paramTokens[1] != blockList.substr(0, paramTokens[1].length()))
+						{
+							result.AddError(blockList, "Unexpected end of block: " + l + ". Expected END_" + blockList + "!");
 						}
 						else
 						{
@@ -108,20 +138,24 @@ namespace Oparse
 				}
 				else
 				{
-					if (blockList == "")
+					// If we're inside an unmapped block, don't bother parsing anything.
+					if (!StringBeginsWith(blockList, DO_NOT_PARSE))
 					{
-						// We're not inside a BlockList.
-						auto keyValue = splitParamAndValue(line);
-						OpValue *parser = GetParamFromMapping(keyValue.first, mapping);
-						if (parser != NULL)
-							parser->ParseValue(keyValue.first, keyValue.second, result);
-					}
-					else
-					{
-						// Line contains no =, must be an item of a BlockList
-						OpValue *parser = GetParamFromMapping(blockList, mapping);
-						if (parser != NULL)
-							parser->ParseValue(blockList, line, result);
+						if (blockList == "")
+						{
+							// We're not inside a BlockList.
+							auto keyValue = splitParamAndValue(l);
+							OpValue *parser = GetParamFromMapping(keyValue.first, mapping);
+							if (parser != NULL)
+								parser->ParseValue(keyValue.first, keyValue.second, result);
+						}
+						else
+						{
+							// Line contains no =, must be an item of a BlockList
+							OpValue *parser = GetParamFromMapping(blockList, mapping);
+							if (parser != NULL)
+								parser->ParseValue(blockList, l, result);
+						}
 					}
 				}
 
@@ -190,6 +224,7 @@ namespace Oparse
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping)
 	{
 		PARSINGRESULT result;
+		result.filename = path;
 		try
 		{
 			OpStandaloneFile *file = new OpStandaloneFile(path);
@@ -207,6 +242,7 @@ namespace Oparse
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping, PathRoot root)
 	{
 		PARSINGRESULT result;
+		result.filename = path;
 		try
 		{
 			OpOrbiterFile *file = new OpOrbiterFile(path, root);
@@ -219,9 +255,10 @@ namespace Oparse
 		return result;
 	}
 
-	PARSINGRESULT ParseFile(FILEHANDLE fileHandle, OpModelDef &mapping)
+	PARSINGRESULT ParseFile(FILEHANDLE fileHandle, OpModelDef &mapping, string filename)
 	{
 		PARSINGRESULT result;
+		result.filename = filename;
 		try
 		{
 			OpOrbiterFile *file = new OpOrbiterFile(fileHandle);

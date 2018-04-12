@@ -1,12 +1,10 @@
 #pragma once
 
-typedef map<string, pair<Oparse::OpValue*, vector<Oparse::OpValidator*>>> OpModelDef;
-typedef vector<Oparse::OpValue*> OpValues;
-
-
-
 namespace Oparse
 {
+
+	typedef map<string, pair<Oparse::OpValue*, vector<Oparse::OpValidator*>>> OpModelDef;
+	typedef vector<Oparse::OpValue*> OpValues;
 
 	void ParseBlock(OpFile *file, OpModelDef &mapping, PARSINGRESULT &result);
 	void clearModelDef(OpModelDef &mapping);

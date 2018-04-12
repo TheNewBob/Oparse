@@ -16,4 +16,6 @@ namespace Oparse
 
 	bool StringContains(const string &str, const string lookFor);
 
+	bool StringBeginsWith(const string &str, const string beginsWith);
+
 }

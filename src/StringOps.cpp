@@ -46,4 +46,9 @@ namespace Oparse
 	{
 		return (str.find(lookFor) != string::npos);
 	}
+
+	bool StringBeginsWith(const string & str, const string beginsWith)
+	{
+		return (str.compare(0, beginsWith.length(), beginsWith) == 0);
+	}
 }

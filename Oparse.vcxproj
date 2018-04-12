@@ -41,6 +41,7 @@
     <ClInclude Include="include\OpDouble.h" />
     <ClInclude Include="include\OpFiles.h" />
     <ClInclude Include="include\OpFloat.h" />
+    <ClInclude Include="include\OpForwardDeclare.h" />
     <ClInclude Include="include\OpInt.h" />
     <ClInclude Include="include\OpList.h" />
     <ClInclude Include="include\OpMixedList.h" />
