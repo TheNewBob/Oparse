@@ -12,6 +12,8 @@ namespace Oparse
 
 		void ParseValue(string key, string value, PARSINGRESULT &result);
 
+		void *GetValue() { return &receiver; };
+
 	private:
 		double &receiver;
 	};

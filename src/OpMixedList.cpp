@@ -4,15 +4,21 @@
 namespace Oparse
 {
 
-	Oparse::OpMixedList::OpMixedList(vector<OpValue*> receivers, string delimiter): receivers(receivers), delimiter(delimiter)
+
+	OpMixedList::OpMixedList(OpValues receivers, string delimiter): OpValue(OP_MIXEDLIST), receivers(receivers), delimiter(delimiter)
 	{
 	}
 
-	Oparse::OpMixedList::~OpMixedList()
+	OpMixedList::~OpMixedList()
 	{
 		for (unsigned int i = 0; i < receivers.size(); ++i)
 		{
-			delete receivers[i];
+			delete receivers[i].first;
+			auto validators = receivers[i].second;
+			for (unsigned int j = 0; j < validators.size(); ++j)
+			{
+				delete validators[j];
+			}
 		}
 		receivers.clear();
 	}
@@ -29,9 +35,23 @@ namespace Oparse
 		{
 			for (unsigned int i = 0; i < elements.size(); ++i)
 			{
-				receivers[i]->ParseValue(key, elements[i], result);
+				receivers[i].first->ParseValue(key, elements[i], result);
 			}
 			setParsed();
+		}
+	}
+
+
+	void OpMixedList::Validate(string paramName, PARSINGRESULT & result)
+	{
+		for (unsigned int i = 0; i < receivers.size(); ++i)
+		{
+			auto validators = receivers[i].second;
+			for (unsigned int j = 0; j < validators.size(); ++j)
+			{
+				validators[j]->Validate(receivers[i].first, paramName, result);
+			}
+
 		}
 	}
 }

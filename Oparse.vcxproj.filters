@@ -72,6 +72,12 @@
     <ClInclude Include="include\OpForwardDeclare.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\OpvLength.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OpNumericValidator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Oparse.cpp">
@@ -111,6 +117,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\OpFiles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpvLength.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpNumericValidator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

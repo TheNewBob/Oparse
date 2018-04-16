@@ -5,32 +5,32 @@
 namespace Oparse
 {
 	// types
-	OpInt *_Int(int & receiver)
+	OpInt *_Param(int & receiver)
 	{
 		return new OpInt(receiver);
 	}
 
-	OpFloat *_Float(float & receiver)
+	OpFloat *_Param(float & receiver)
 	{
 		return new OpFloat(receiver);
 	}
 
-	OpDouble *_Double(double & receiver)
+	OpDouble *_Param(double & receiver)
 	{
 		return new OpDouble(receiver);
 	}
 
-	OpString *_String(string & receiver)
+	OpString *_Param(string & receiver)
 	{
 		return new OpString(receiver);
 	}
 
-	OpBool * _Bool(bool & receiver)
+	OpBool * _Param(bool & receiver)
 	{
 		return new OpBool(receiver);
 	}
 
-	OpVector3 * _Vector3(VECTOR3 & receiver)
+	OpVector3 * _Param(VECTOR3 & receiver)
 	{
 		return new OpVector3(receiver);
 	}
@@ -75,5 +75,43 @@ namespace Oparse
 	OpvRequired *_REQUIRED()
 	{
 		return new OpvRequired();
+	}
+
+	OpNumericValidator * _MAX(double max)
+	{
+		stringstream ss;
+		ss << "Value must not be larger than " << max << "!";
+		return new OpNumericValidator(
+			[&](double value) { return value <= max; },
+			ss.str());
+	}
+
+	OpNumericValidator * _MIN(double min)
+	{
+		stringstream ss;
+		ss << "Value must be smaller than " << min << "!";
+		return new OpNumericValidator(
+			[&](double value) { return value >= min; },
+			ss.str());
+	}
+
+	OpNumericValidator * _RANGE(double min, double max)
+	{
+		stringstream ss;
+		ss << "Value must be between " << min << " and " << max << "!";
+		return new OpNumericValidator(
+			[&](double value) { return value >= min && value <= max; },
+			ss.str());
+	}
+
+	OpvLength * _LENGTH(unsigned int max)
+	{
+		return new OpvLength(0, max);
+	}
+
+	OpvLength * _LENGTH(unsigned int min, unsigned int max)
+	{
+		if (min > max) throw runtime_error("min cannot be larger than max!");
+		return new OpvLength(min, max);
 	}
 }

@@ -7,7 +7,7 @@
 
 namespace Oparse
 {
-	OpBool::OpBool(bool &receiver): receiver(receiver)
+	OpBool::OpBool(bool &receiver): OpValue(OP_BOOL), receiver(receiver)
 	{
 	}
 
@@ -15,6 +15,7 @@ namespace Oparse
 	OpBool::~OpBool()
 	{
 	}
+
 	void OpBool::ParseValue(string key, string value, PARSINGRESULT &result)
 	{
 		try

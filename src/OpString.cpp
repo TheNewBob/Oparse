@@ -6,7 +6,7 @@
 
 namespace Oparse
 {
-	OpString::OpString(string &receiver, bool toLower) : receiver(receiver), toLower(toLower)
+	OpString::OpString(string &receiver, bool toLower) : OpValue(OP_STRING), receiver(receiver), toLower(toLower)
 	{
 	}
 

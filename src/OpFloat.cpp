@@ -7,7 +7,7 @@
 namespace Oparse
 {
 
-	OpFloat::OpFloat(float & receiver) : receiver(receiver)
+	OpFloat::OpFloat(float & receiver) : OpValue(OP_FLOAT), receiver(receiver)
 	{
 	}
 

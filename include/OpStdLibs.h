@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <sstream>
+#include <functional>
 #ifdef OPARSE_STANDALONE
 #include <fstream>
 #else

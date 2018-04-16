@@ -18,10 +18,10 @@ public:
 	OpModelDef GetModelDef()
 	{
 		return 	OpModelDef() = {
-			{ "param1",	{ _String(param1),	{} } },
-			{ "param2",	{ _Int(param2),		{} } },
+			{ "param1",	{ _Param(param1),	{} } },
+			{ "param2",	{ _Param(param2),		{} } },
 			{ "param3",	{ _List(param3),	{} } },
-			{ "param4", { _Int(param4),		{_REQUIRED()} } }
+			{ "param4", { _Param(param4),		{_REQUIRED()} } }
 		};
 	};
 };

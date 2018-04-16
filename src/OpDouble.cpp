@@ -8,7 +8,7 @@ namespace Oparse
 {
 
 
-	OpDouble::OpDouble(double & receiver) : receiver(receiver)
+	OpDouble::OpDouble(double & receiver) : OpValue(OP_DOUBLE), receiver(receiver)
 	{
 	}
 

@@ -21,9 +21,20 @@ namespace Oparse
 
 		void ParseValue(string key, string value, PARSINGRESULT &result);
 
+		void *GetValue() { return receiver; };
+
+		/**
+		 * \return The type of the list elements.
+		 */
+		OP_TYPE GetListType() { return listType; };
+
+		unsigned int GetSize() { return size; };
+
 	private:
+
 		void *receiver;
-		int type = -1;
+		OP_TYPE listType;
 		string delimiter = ",";
+		unsigned int size = 0;
 	};
 }

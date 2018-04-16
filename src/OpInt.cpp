@@ -7,7 +7,7 @@
 namespace Oparse
 {
 
-	OpInt::OpInt(int & receiver) : receiver(receiver)
+	OpInt::OpInt(int & receiver) : OpValue(OP_INT), receiver(receiver)
 	{
 	}
 

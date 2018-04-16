@@ -16,11 +16,13 @@ struct MixedListDemo {
 	OpMixedList *GetMapping()
 	{
 		return _MixedList(OpValues() =
-			{ _String(first),
-			  _Vector3(vector3),
-			  _String(second),
-			  _Bool(testSuccessful),
-			  _String(third) }, ",");
+			{
+				{ _Param(first), {} },
+				{ _Param(vector3), {} },
+				{ _Param(second), {} },
+				{ _Param(testSuccessful), {} },
+				{ _Param(third), { _LENGTH(5, 6)} }
+			}, ",");
 	}
 };
 
@@ -48,14 +50,14 @@ int main()
 
 	vector<string>() = {};
 	OpModelDef model = {
-		{ "answer",{ _Int(answer),{ _REQUIRED() } } },
-		{ "sqrt2",{ _Float(sqrt2),{} } },
-		{ "pi",{ _Double(pi),{} } },
-		{ "question",{ _String(question),{} } },
-		{ "makesSense",{ _Bool(makesSense),{} } },
-		{ "vector3", { _Vector3(vector3), {} } },
-		{ "isNotHere",{ _Bool(isNotHere),{ _REQUIRED() } } },
-		{ "intList", { _List(intList), {} } },
+		{ "answer",{ _Param(answer),{ _REQUIRED() } } },
+		{ "sqrt2",{ _Param(sqrt2),{} } },
+		{ "pi",{ _Param(pi), {_MAX(3.5)} } },
+		{ "question",{ _Param(question), {} } },
+		{ "makesSense",{ _Param(makesSense),{} } },
+		{ "vector3", { _Param(vector3), {} } },
+		{ "isNotHere",{ _Param(isNotHere),{ _REQUIRED() } } },
+		{ "intList", { _List(intList), {_MAX(2)} } },
 		{ "floatList", { _List(floatList), {} } },
 		{ "boolList",{ _List(boolList),{} } },
 		{ "stringList",{ _List(stringList, "#"),{} } },

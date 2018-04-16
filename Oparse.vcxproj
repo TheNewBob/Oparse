@@ -46,11 +46,13 @@
     <ClInclude Include="include\OpList.h" />
     <ClInclude Include="include\OpMixedList.h" />
     <ClInclude Include="include\OpModel.h" />
+    <ClInclude Include="include\OpNumericValidator.h" />
     <ClInclude Include="include\OpStdLibs.h" />
     <ClInclude Include="include\OpString.h" />
     <ClInclude Include="include\OpValidator.h" />
     <ClInclude Include="include\OpValue.h" />
     <ClInclude Include="include\OpVector3.h" />
+    <ClInclude Include="include\OpvLength.h" />
     <ClInclude Include="include\OpvRequired.h" />
     <ClInclude Include="include\PARSINGRESULT.h" />
     <ClInclude Include="include\StringOps.h" />
@@ -65,8 +67,10 @@
     <ClCompile Include="src\OpInt.cpp" />
     <ClCompile Include="src\OpList.cpp" />
     <ClCompile Include="src\OpMixedList.cpp" />
+    <ClCompile Include="src\OpNumericValidator.cpp" />
     <ClCompile Include="src\OpString.cpp" />
     <ClCompile Include="src\OpVector3.cpp" />
+    <ClCompile Include="src\OpvLength.cpp" />
     <ClCompile Include="src\OpvRequired.cpp" />
     <ClCompile Include="src\StringOps.cpp" />
   </ItemGroup>

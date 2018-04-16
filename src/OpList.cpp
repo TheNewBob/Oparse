@@ -13,102 +13,99 @@
 namespace Oparse
 {
 
-	enum LISTTYPE
-	{
-		T_INT,
-		T_FLOAT,
-		T_DOUBLE,
-		T_BOOL,
-		T_STRING,
-		T_VECTOR3
-	};
-
 	OpList::OpList(vector<int> &receiver, string delimiter)
-		: receiver(&receiver), 
+		: OpValue(OP_LIST), receiver(&receiver), 
 		delimiter(delimiter), 
-		type(T_INT)
+		listType(OP_INT)
 	{
 	}
 
 	OpList::OpList(vector<float> &receiver, string delimiter) 
-		: receiver(&receiver), 
+		: OpValue(OP_LIST), receiver(&receiver),
 		delimiter(delimiter),
-		type(T_FLOAT)
+		listType(OP_FLOAT)
 	{
 	}
 
 	OpList::OpList(vector<double> &receiver, string delimiter)
-		: receiver(&receiver),
+		: OpValue(OP_LIST), receiver(&receiver),
 		delimiter(delimiter),
-		type(T_DOUBLE)
+		listType(OP_DOUBLE)
 	{}
 
 	OpList::OpList(vector<bool> &receiver, string delimiter)
-		: receiver(&receiver),
+		: OpValue(OP_LIST), receiver(&receiver),
 		delimiter(delimiter),
-		type(T_BOOL)
+		listType(OP_BOOL)
 	{}
 
 	OpList::OpList(vector<string> &receiver, string delimiter)
-		: receiver(&receiver),
+		: OpValue(OP_LIST), receiver(&receiver),
 		delimiter(delimiter),
-		type(T_STRING)
+		listType(OP_STRING)
 	{}
 
 	OpList::OpList(vector<VECTOR3> &receiver, string delimiter)
-		: receiver(&receiver),
+		: OpValue(OP_LIST), receiver(&receiver),
 		delimiter(delimiter),
-		type(T_VECTOR3)
+		listType(OP_VECTOR3)
 	{}
 
 	void OpList::ParseValue(string key, string value, PARSINGRESULT &result)
 	{
 		vector<string> elements;
 		SplitString(value, elements, delimiter);
+		setParsed();
 		
 		for (unsigned int i = 0; i < elements.size(); ++i)
 		{
-			if (type == T_INT)
+			if (listType == OP_INT)
 			{
 				int temp = -1;
 				OpInt parser(temp);
 				parser.ParseValue(key, elements[i], result);
 				((vector<int>*)receiver)->push_back(temp);
+				size++;
 			}
-			else if (type == T_FLOAT)
+			else if (listType == OP_FLOAT)
 			{
 				float temp = -1;
 				OpFloat parser(temp);
 				parser.ParseValue(key, elements[i], result);
 				((vector<float>*)receiver)->push_back(temp);
+				size++;
 			}
-			else if (type == T_DOUBLE)
+			else if (listType == OP_DOUBLE)
 			{
 				double temp = -1;
 				OpDouble parser(temp);
 				parser.ParseValue(key, elements[i], result);
 				((vector<double>*)receiver)->push_back(temp);
+				size++;
 			}
-			else if (type == T_BOOL)
+			else if (listType == OP_BOOL)
 			{
 				bool temp = false;
 				OpBool parser(temp);
 				parser.ParseValue(key, elements[i], result);
 				((vector<bool>*)receiver)->push_back(temp);
+				size++;
 			}
-			else if (type == T_STRING)
+			else if (listType == OP_STRING)
 			{
 				string temp = "";
 				OpString parser(temp);
 				parser.ParseValue(key, elements[i], result);
 				((vector<string>*)receiver)->push_back(temp);
+				size++;
 			}
-			else if (type == T_VECTOR3)
+			else if (listType == OP_VECTOR3)
 			{
 				VECTOR3 temp;
 				OpVector3 parser(temp);
 				parser.ParseValue(key, elements[i], result);
 				((vector<VECTOR3>*)receiver)->push_back(temp);
+				size++;
 			}
 			else
 			{

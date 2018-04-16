@@ -6,7 +6,7 @@
 
 namespace Oparse
 {
-	OpVector3::OpVector3(VECTOR3 & receiver): receiver(receiver)
+	OpVector3::OpVector3(VECTOR3 & receiver): OpValue(OP_VECTOR3), receiver(receiver)
 	{
 	}
 

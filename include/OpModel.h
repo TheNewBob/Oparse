@@ -4,7 +4,7 @@ namespace Oparse
 {
 
 	typedef map<string, pair<Oparse::OpValue*, vector<Oparse::OpValidator*>>> OpModelDef;
-	typedef vector<Oparse::OpValue*> OpValues;
+	typedef vector<pair<Oparse::OpValue*, vector<Oparse::OpValidator*>>> OpValues;
 
 	void ParseBlock(OpFile *file, OpModelDef &mapping, PARSINGRESULT &result);
 	void clearModelDef(OpModelDef &mapping);
@@ -17,6 +17,8 @@ namespace Oparse
 		: public OpValue
 	{
 	public:
+		OpNestable(OP_TYPE type) : OpValue(type) {};
+		virtual ~OpNestable() {};
 		virtual void ParseValue(OpFile *file, PARSINGRESULT &result) = 0;
 		virtual void Validate(PARSINGRESULT &result) = 0;
 	private:
@@ -32,8 +34,8 @@ namespace Oparse
 		: public OpNestable
 	{
 	public:
-		OpModel(T &receiver) : mapping(receiver.GetModelDef()) {}
-		~OpModel() { clearModelDef(mapping); };
+		OpModel(T &receiver) : OpNestable(OP_MODEL), mapping(receiver.GetModelDef()) {}
+		virtual ~OpModel() { clearModelDef(mapping); };
 
 		void ParseValue(OpFile *file, PARSINGRESULT &result)
 		{
@@ -46,6 +48,8 @@ namespace Oparse
 			validateParsedMap(mapping, result);
 		}
 
+		void *GetValue() { return NULL; };
+
 	private:
 		OpModelDef mapping;
 	};
@@ -57,7 +61,7 @@ namespace Oparse
 	 */
 	template <class T, class U>
 	class OpModelFactory
-		: public OpModelFactoryFacade
+		: public OpNestable
 	{
 	public:
 
@@ -65,8 +69,8 @@ namespace Oparse
 		 * \brief Creates a model factory where T is the type to be instatiated, and U is the type in which the models are stored.
 		 * \note It is expected that T inherits U, and that T provides a method OpModelDef GetModelDef().
 		 */
-		OpModelFactory<T, U>(vector<U*> &receiver) : receiver(receiver) {};
-		~OpModelFactory() { clearModelDef(mapping); };
+		OpModelFactory<T, U>(vector<U*> &receiver) : OpNestable(OP_MODELFACTORY), receiver(receiver) {};
+		virtual ~OpModelFactory() { clearModelDef(mapping); };
 
 		void ParseValue(OpFile *file, PARSINGRESULT &result)
 		{
@@ -81,6 +85,8 @@ namespace Oparse
 		{
 			validateParsedMap(mapping, result);
 		}
+
+		void *GetValue() { return &receiver; };
 
 	private:
 		vector<U*> &receiver;

@@ -6,5 +6,5 @@ namespace Oparse
 	class OpValidator;
 	class OpMixedList;
 	typedef map<string, pair<Oparse::OpValue*, vector<Oparse::OpValidator*>>> OpModelDef;
-	typedef vector<Oparse::OpValue*> OpValues;
+	typedef vector<pair<Oparse::OpValue*, vector<Oparse::OpValidator*>>> OpValues;
 }

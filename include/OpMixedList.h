@@ -9,13 +9,17 @@ namespace Oparse
 		:public OpValue
 	{
 	public:
-		OpMixedList(vector<OpValue*> receivers, string delimiter = "\t");
+		OpMixedList(OpValues receivers, string delimiter = "\t");
 		~OpMixedList();
 
 		virtual void ParseValue(string key, string value, PARSINGRESULT &result);
 
+		void *GetValue() { return &receivers; };
+
+		void Validate(string paramName, PARSINGRESULT &result);
+
 	private:
-		vector<OpValue*> receivers;
+		OpValues receivers;
 		string delimiter;
 	};
 }

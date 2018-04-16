@@ -10,6 +10,9 @@ namespace Oparse
 		~OpvRequired();
 
 		void Validate(OpValue *value, const string paramName, PARSINGRESULT &result);
+
+	private:
+		bool isApplicableTo(OpValue *value) { return true; };
 	};
 
 }

@@ -191,7 +191,17 @@ namespace Oparse
 		{
 			// walk through all validators for each value. 
 			OpValue *value = param->second.first;
+			auto type = value->GetType();
 			vector<OpValidator*> &validators = param->second.second;
+
+			if (type == OP_MIXEDLIST)
+			{
+				((OpMixedList*)value)->Validate(param->first, result);
+			}
+			else if (type == OP_BLOCKLIST)
+			{
+				((OpBlockListFacade*)value)->Validate(param->first, result);
+			}
 			for (auto validator = validators.begin(); validator != validators.end(); ++validator)
 			{
 				(*validator)->Validate(value, param->first, result);

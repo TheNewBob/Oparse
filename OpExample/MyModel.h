@@ -17,8 +17,8 @@ public:
 
 	OpModelDef GetModelDef() {
 		return OpModelDef() = {
-			{ "param1",{ _Double(param1), {} } },
-			{ "param2",{ _Bool(param2), {} } },
+			{ "param1",{ _Param(param1), {} } },
+			{ "param2",{ _Param(param2), {} } },
 			{ "param3",{ _List(param3), {} } },
 			{ "NESTED MODEL 1",{ _Model<NestedModel>(nestedModel), {} } }
 		};
