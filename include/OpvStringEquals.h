@@ -1,17 +1,17 @@
 namespace Oparse
 {
-	class OpvLength
+	class OpvStringEquals
 		: public OpValidator
 	{
 	public:
-		OpvLength(double minimum, double maximum) : minimum(minimum), maximum(maximum) {};
+		OpvStringEquals(vector<string> allowedValues, bool caseSensitive = false);
 
 		void Validate(OpValue *value, const string paramName, PARSINGRESULT &result);
-	
-	private:
-		double maximum;
-		double minimum;
 
+	private:
+		vector<string> allowedValues;
+		bool caseSensitive;
 		bool isApplicableTo(OpValue *value);
 	};
+
 }

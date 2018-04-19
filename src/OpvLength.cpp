@@ -12,20 +12,20 @@ void Oparse::OpvLength::Validate(OpValue * value, const string paramName, PARSIN
 		if (type == OP_STRING)
 		{
 			string *val = (string*)value->GetValue();
-			if (val->length() < min || val->length() > max)
+			if (val->length() < minimum || val->length() > maximum)
 			{
 				stringstream ss;
-				ss << "String must be between " << min << " and " << max << " characters long!";
+				ss << "String is \"" + *val + "\" but must be between " << minimum << " and " << maximum << " characters long!";
 				result.AddError(paramName, ss.str());
 			}
 		}
 		else if (type == OP_LIST)
 		{
 			auto list = (OpList*)value;
-			if (list->GetSize() < min || list->GetSize() > max)
+			if (list->GetSize() < minimum || list->GetSize() > maximum)
 			{
 				stringstream ss;
-				ss << "List must be between " << min << " and " << max << " elements long!";
+				ss << "List must be between " << minimum << " and " << maximum << " elements long!";
 				result.AddError(paramName, ss.str());
 			}
 		}

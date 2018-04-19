@@ -20,11 +20,11 @@ namespace Oparse
 		{
 			if (toLower)
 			{
-				receiver = Oparse::StringToLower(value);
+				receiver = RemoveExtraWhiteSpace(StringToLower(value));
 			}
 			else
 			{
-				receiver = value;
+				receiver = RemoveExtraWhiteSpace(value);
 			}
 			setParsed();
 		}

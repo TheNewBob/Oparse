@@ -114,4 +114,8 @@ namespace Oparse
 		if (min > max) throw runtime_error("min cannot be larger than max!");
 		return new OpvLength(min, max);
 	}
+	OpvStringEquals * _StringEquals(vector<string> allowedValues, bool caseSensitive)
+	{
+		return new OpvStringEquals(allowedValues, caseSensitive);
+	}
 }

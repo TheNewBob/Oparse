@@ -54,6 +54,7 @@
     <ClInclude Include="include\OpVector3.h" />
     <ClInclude Include="include\OpvLength.h" />
     <ClInclude Include="include\OpvRequired.h" />
+    <ClInclude Include="include\OpvStringEquals.h" />
     <ClInclude Include="include\PARSINGRESULT.h" />
     <ClInclude Include="include\StringOps.h" />
   </ItemGroup>
@@ -72,6 +73,7 @@
     <ClCompile Include="src\OpVector3.cpp" />
     <ClCompile Include="src\OpvLength.cpp" />
     <ClCompile Include="src\OpvRequired.cpp" />
+    <ClCompile Include="src\OpvStringEquals.cpp" />
     <ClCompile Include="src\StringOps.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
