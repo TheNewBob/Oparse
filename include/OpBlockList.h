@@ -37,7 +37,7 @@ namespace Oparse
 				OpMixedList *mapping = newItem->GetMapping();
 				mapping->ParseValue(key, value, result);
 				ptrReceiver.push_back(newItem);
-				mappings.push_back(mapping);
+				delete mapping;
 			}
 			else
 			{
@@ -45,7 +45,7 @@ namespace Oparse
 				OpMixedList *mapping = newItem.GetMapping();
 				mapping->ParseValue(key, value, result);
 				receiver.push_back(newItem);
-				mappings.push_back(mapping);
+				delete mapping;
 			}
 			setParsed();
 		}
@@ -54,9 +54,21 @@ namespace Oparse
 
 		void Validate(string paramName, PARSINGRESULT &result)
 		{
-			for (unsigned int i = 0; i < mappings.size(); ++i)
+			for (unsigned int i = 0; i < receiver.size(); ++i)
 			{
-				mappings[i]->Validate(paramName, result);
+				OpMixedList *mapping;
+				if (ptrs)
+				{
+					mapping = ptrReceiver[i]->GetMapping();
+				}
+				else
+				{
+					mapping = receiver[i].GetMapping();
+				}
+				mapping->Validate(paramName, result);
+				delete mapping;
+
+				//mappings[i]->Validate(paramName, result);
 			}
 		}
 

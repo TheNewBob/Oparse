@@ -56,7 +56,7 @@ namespace Oparse
 	OpNumericValidator *_RANGE(double min, double max);
 	OpvLength *_LENGTH(unsigned int max);
 	OpvLength *_LENGTH(unsigned int min, unsigned int max);
-	OpvStringEquals *_StringEquals(vector<string> allowedValues, bool caseSensitive = false);
+	OpvStringEquals *_ISANYOF(vector<string> allowedValues, bool caseSensitive = false);
 
 
 	//const string WHITESPACE;

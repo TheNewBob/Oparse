@@ -17,11 +17,11 @@ struct MixedListDemo {
 	{
 		return _MixedList(OpValues() =
 			{
-				{ _Param(first), {_StringEquals(vector<string>() = {"a vector3"}) } },
+				{ _Param(first), {_ISANYOF(vector<string>() = {"a vector3"}) } },
 				{ _Param(vector3), {} },
-				{ _Param(second), { _StringEquals(vector<string>() = { "a vector3" }) } },
+				{ _Param(second), { _ISANYOF(vector<string>() = { "a vector3" }) } },
 				{ _Param(testSuccessful), {} },
-				{ _Param(third), { _LENGTH(5, 6)} }
+				{ _Param(third), { _LENGTH(0, 256)} }
 			}, ",");
 	}
 };
@@ -43,7 +43,7 @@ int main()
 	vector<VECTOR3> vector3List;
 
 	MixedListDemo mixedList;
-	vector<MixedListDemo*> blockDemo;
+	vector<MixedListDemo> blockDemo;
 	
 	MyModel myModel;
 	
