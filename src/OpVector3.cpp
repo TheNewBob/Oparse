@@ -25,6 +25,7 @@ namespace Oparse
 				receiver.x = stod(elements[0]);
 				receiver.y = stod(elements[1]);
 				receiver.z = stod(elements[2]);
+				setParsed();
 			}
 		}
 		catch (exception)

@@ -81,6 +81,9 @@
     <ClInclude Include="include\OpvStringEquals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\OpvConditionalRequired.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Oparse.cpp">
@@ -129,6 +132,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\OpvStringEquals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpvConditionalRequired.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

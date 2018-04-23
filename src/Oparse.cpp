@@ -202,9 +202,12 @@ namespace Oparse
 			{
 				((OpBlockListFacade*)value)->Validate(param->first, result);
 			}
+
 			for (auto validator = validators.begin(); validator != validators.end(); ++validator)
 			{
-				(*validator)->Validate(value, param->first, result);
+				auto conditional = dynamic_cast<OpvConditionalRequiredFacade*>(*validator);
+				if (conditional != NULL) conditional->Validate(value, param->first, mapping, result);
+				else (*validator)->Validate(value, param->first, result);
 			}
 			// check if this is a nested value
 			auto nestedValue = dynamic_cast<OpNestable*>(value);

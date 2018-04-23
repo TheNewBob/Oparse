@@ -22,6 +22,7 @@
 #include "OpNumericValidator.h"
 #include "OpvLength.h"
 #include "OpvStringEquals.h"
+#include "OpvConditionalRequired.h"
 
 
 
@@ -49,8 +50,14 @@ namespace Oparse
 	template <typename T> OpBlockList<T> *_Block(vector<T*> &receiver) { return new OpBlockList<T>(receiver); };
 	template <typename T> OpModel<T> *_Model(T &receiver) { return new OpModel<T>(receiver); };
 	template <typename T, typename U = T> OpModelFactory<T, U> *_ModelFactory(vector<U*> &receiver) { return new OpModelFactory<T, U>(receiver); };
+
 	//validator factories
 	OpvRequired *_REQUIRED();
+	OpvConditionalRequiredByParam * _REQUIREDBY(string paramName);
+	OpvConditionalRequiredByParamValue *_REQUIREDBY(string paramName, int value);
+	OpvConditionalRequiredByParamValue *_REQUIREDBY(string paramName, bool value);
+	OpvConditionalRequiredByParamValue *_REQUIREDBY(string paramName, string value);
+	OpvConditionalRequiredByParam *_EXCLUDEDBY(string paramName);
 	OpNumericValidator *_MAX(double max);
 	OpNumericValidator *_MIN(double min);
 	OpNumericValidator *_RANGE(double min, double max);

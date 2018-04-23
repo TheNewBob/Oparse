@@ -77,6 +77,31 @@ namespace Oparse
 		return new OpvRequired();
 	}
 
+	OpvConditionalRequiredByParam * _REQUIREDBY(string paramName)
+	{
+		return new OpvConditionalRequiredByParam(false, paramName);
+	}
+
+	OpvConditionalRequiredByParamValue *_REQUIREDBY(string paramName, int value)
+	{
+		return new OpvConditionalRequiredByParamValue(paramName, value);
+	}
+
+	OpvConditionalRequiredByParamValue *_REQUIREDBY(string paramName, bool value)
+	{
+		return new OpvConditionalRequiredByParamValue(paramName, value);
+	}
+
+	OpvConditionalRequiredByParamValue *_REQUIREDBY(string paramName, string value)
+	{
+		return new OpvConditionalRequiredByParamValue(paramName, value);
+	}
+
+	OpvConditionalRequiredByParam * _EXCLUDEDBY(string paramName)
+	{
+		return new OpvConditionalRequiredByParam(true, paramName);
+	}
+
 	OpNumericValidator * _MAX(double max)
 	{
 		stringstream ss;

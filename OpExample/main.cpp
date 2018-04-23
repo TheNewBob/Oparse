@@ -50,17 +50,18 @@ int main()
 
 	vector<string>() = {};
 	OpModelDef model = {
+		{ "test", { _Param(pi), {} } },
 		{ "answer",{ _Param(answer),{ _REQUIRED() } } },
 		{ "sqrt2",{ _Param(sqrt2),{} } },
 		{ "pi",{ _Param(pi), {_MAX(3.5)} } },
 		{ "question",{ _Param(question), {} } },
-		{ "makesSense",{ _Param(makesSense),{} } },
-		{ "vector3", { _Param(vector3), {} } },
+		{ "makesSense",{ _Param(makesSense),{ _REQUIREDBY("answer", 42) } } },
+		{ "vector3", { _Param(vector3), { _REQUIREDBY("test") } } },
 		{ "isNotHere",{ _Param(isNotHere),{ _REQUIRED() } } },
 		{ "intList", { _List(intList), {_MAX(2)} } },
-		{ "floatList", { _List(floatList), {} } },
+		{ "floatList", { _List(floatList), {_EXCLUDEDBY("answer")} } },
 		{ "boolList",{ _List(boolList),{} } },
-		{ "stringList",{ _List(stringList, "#"),{} } },
+		{ "stringList",{ _List(stringList, "#"),{_EXCLUDEDBY("test")} } },
 		{ "vector3List", { _List(vector3List), {} } },
 		{ "mixedList", { mixedList.GetMapping(), {} } },
 		{ "BLOCKLIST 1", { _Block<MixedListDemo>(blockDemo), {} } },

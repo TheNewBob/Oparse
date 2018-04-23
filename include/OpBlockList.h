@@ -21,11 +21,6 @@ namespace Oparse
 		OpBlockList<T>(vector<T*> &receiver) : receiver(vector<T>()), ptrReceiver(receiver), ptrs(true) {};
 		~OpBlockList() 
 		{
-			for (unsigned int i = 0; i < mappings.size(); ++i)
-			{
-				delete mappings[i];
-			}
-			mappings.clear();
 		};
 
 		void ParseValue(string key, string value, PARSINGRESULT &result)
@@ -67,8 +62,6 @@ namespace Oparse
 				}
 				mapping->Validate(paramName, result);
 				delete mapping;
-
-				//mappings[i]->Validate(paramName, result);
 			}
 		}
 
@@ -76,6 +69,5 @@ namespace Oparse
 		vector<T> &receiver;
 		vector<T*> &ptrReceiver;
 		bool ptrs = false;
-		vector<OpMixedList*> mappings;
 	};
 }
