@@ -57,10 +57,10 @@ namespace Oparse
 
 
 	/**
-	 * \brief Allocates a new model on the fly and adds it to the passed vector.
+	 * \brief Allocates a new model on the fly and adds a pointer to it to the passed vector.
 	 */
 	template <class T, class U>
-	class OpModelFactory
+	class OpModelPtrFactory
 		: public OpNestable
 	{
 	public:
@@ -69,15 +69,15 @@ namespace Oparse
 		 * \brief Creates a model factory where T is the type to be instatiated, and U is the type in which the models are stored.
 		 * \note It is expected that T inherits U, and that T provides a method OpModelDef GetModelDef().
 		 */
-		OpModelFactory<T, U>(vector<U*> &receiver) : OpNestable(OP_MODELFACTORY), receiver(receiver) {};
-		virtual ~OpModelFactory() { clearModelDef(mapping); };
+		OpModelPtrFactory<T, U>(vector<U*> &receiver) : OpNestable(OP_MODELFACTORY), receiver(receiver) {};
+		virtual ~OpModelPtrFactory() { clearModelDef(mapping); };
 
 		void ParseValue(OpFile *file, PARSINGRESULT &result)
 		{
 			if (!WasParsed()) receiver.clear();
 			T newModel = new T;
 			mapping = newModel->GetModelDef();
-			ptrReceiver.push_back(newModel);
+			receiver.push_back(newModel);
 			ParseBlock(file, mapping, result);
 			setParsed();
 		}
@@ -91,6 +91,40 @@ namespace Oparse
 
 	private:
 		vector<U*> &receiver;
+		OpModelDef mapping;
+	};
+
+	/**
+	* \brief Allocates a new model on the fly and it to the passed vector.
+	*/
+	template <class T>
+	class OpModelFactory
+		: public OpNestable
+	{
+	public:
+
+		OpModelFactory<T>(vector<T> &receiver) : OpNestable(OP_MODELFACTORY), receiver(receiver) {};
+		virtual ~OpModelFactory() { clearModelDef(mapping); };
+
+		void ParseValue(OpFile *file, PARSINGRESULT &result)
+		{
+			if (!WasParsed()) receiver.clear();
+			T newModel;
+			mapping = newModel.GetModelDef();
+			receiver.push_back(newModel);
+			ParseBlock(file, mapping, result);
+			setParsed();
+		}
+
+		void Validate(PARSINGRESULT &result)
+		{
+			validateParsedMap(mapping, result);
+		}
+
+		void *GetValue() { return &receiver; };
+
+	private:
+		vector<T> &receiver;
 		OpModelDef mapping;
 	};
 

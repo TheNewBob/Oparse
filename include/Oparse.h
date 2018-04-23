@@ -49,7 +49,8 @@ namespace Oparse
 	template <typename T> OpBlockList<T> *_Block(vector<T> &receiver) { return new OpBlockList<T>(receiver); };
 	template <typename T> OpBlockList<T> *_Block(vector<T*> &receiver) { return new OpBlockList<T>(receiver); };
 	template <typename T> OpModel<T> *_Model(T &receiver) { return new OpModel<T>(receiver); };
-	template <typename T, typename U = T> OpModelFactory<T, U> *_ModelFactory(vector<U*> &receiver) { return new OpModelFactory<T, U>(receiver); };
+	template <typename T> OpModelFactory<T> *_ModelFactory(vector<T> &receiver) { return new OpModelFactory<T>(receiver); };
+	template <typename T, typename U = T> OpModelPtrFactory<T, U> *_ModelFactory(vector<U*> &receiver) { return new OpModelFactory<T, U>(receiver); };
 
 	//validator factories
 	OpvRequired *_REQUIRED();
