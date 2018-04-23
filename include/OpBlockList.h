@@ -27,6 +27,7 @@ namespace Oparse
 		{
 			if (ptrs)
 			{
+				if (!WasParsed()) ptrReceiver.clear();
 				//allocate new objects as pointers
 				T *newItem = new T;
 				OpMixedList *mapping = newItem->GetMapping();
@@ -36,6 +37,7 @@ namespace Oparse
 			}
 			else
 			{
+				if (!WasParsed()) receiver.clear();
 				T newItem;
 				OpMixedList *mapping = newItem.GetMapping();
 				mapping->ParseValue(key, value, result);

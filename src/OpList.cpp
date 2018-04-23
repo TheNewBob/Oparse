@@ -55,7 +55,6 @@ namespace Oparse
 	{
 		vector<string> elements;
 		SplitString(value, elements, delimiter);
-		setParsed();
 		
 		for (unsigned int i = 0; i < elements.size(); ++i)
 		{
@@ -64,7 +63,9 @@ namespace Oparse
 				int temp = -1;
 				OpInt parser(temp);
 				parser.ParseValue(key, elements[i], result);
-				((vector<int>*)receiver)->push_back(temp);
+				auto rec = ((vector<int>*)receiver);
+				if (!WasParsed()) rec->clear();
+				rec->push_back(temp);
 				size++;
 			}
 			else if (listType == OP_FLOAT)
@@ -72,7 +73,9 @@ namespace Oparse
 				float temp = -1;
 				OpFloat parser(temp);
 				parser.ParseValue(key, elements[i], result);
-				((vector<float>*)receiver)->push_back(temp);
+				auto rec = ((vector<float>*)receiver);
+				if (!WasParsed()) rec->clear();
+				rec->push_back(temp);
 				size++;
 			}
 			else if (listType == OP_DOUBLE)
@@ -80,7 +83,9 @@ namespace Oparse
 				double temp = -1;
 				OpDouble parser(temp);
 				parser.ParseValue(key, elements[i], result);
-				((vector<double>*)receiver)->push_back(temp);
+				auto rec = ((vector<double>*)receiver);
+				if (!WasParsed()) rec->clear();
+				rec->push_back(temp);
 				size++;
 			}
 			else if (listType == OP_BOOL)
@@ -88,7 +93,9 @@ namespace Oparse
 				bool temp = false;
 				OpBool parser(temp);
 				parser.ParseValue(key, elements[i], result);
-				((vector<bool>*)receiver)->push_back(temp);
+				auto rec = ((vector<bool>*)receiver);
+				if (!WasParsed()) rec->clear();
+				rec->push_back(temp);
 				size++;
 			}
 			else if (listType == OP_STRING)
@@ -96,7 +103,9 @@ namespace Oparse
 				string temp = "";
 				OpString parser(temp);
 				parser.ParseValue(key, elements[i], result);
-				((vector<string>*)receiver)->push_back(temp);
+				auto rec = ((vector<string>*)receiver);
+				if (!WasParsed()) rec->clear();
+				rec->push_back(temp);
 				size++;
 			}
 			else if (listType == OP_VECTOR3)
@@ -104,13 +113,17 @@ namespace Oparse
 				VECTOR3 temp;
 				OpVector3 parser(temp);
 				parser.ParseValue(key, elements[i], result);
-				((vector<VECTOR3>*)receiver)->push_back(temp);
+				auto rec = ((vector<VECTOR3>*)receiver);
+				if (!WasParsed()) rec->clear();
+				rec->push_back(temp);
 				size++;
 			}
 			else
 			{
 				result.AddError(key, "Error while parsing OpList: Unsupported type!");
 			}
+			setParsed();
+
 		}
 	}
 }
