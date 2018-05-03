@@ -84,6 +84,9 @@
     <ClInclude Include="include\OpvConditionalRequired.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\OpLambda.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Oparse.cpp">

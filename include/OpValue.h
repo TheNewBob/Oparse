@@ -15,7 +15,8 @@ namespace Oparse
 		OP_MIXEDLIST,
 		OP_BLOCKLIST,
 		OP_MODEL,
-		OP_MODELFACTORY
+		OP_MODELFACTORY,
+		OP_LAMBDA
 	};
 
 	class OpValue

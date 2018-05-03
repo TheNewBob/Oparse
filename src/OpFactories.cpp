@@ -35,6 +35,11 @@ namespace Oparse
 		return new OpVector3(receiver);
 	}
 
+	OpLambda * _Param(function<string(string value)> lambda, bool tolower)
+	{
+		return new OpLambda(lambda, tolower);
+	}
+
 	OpList *_List(vector<int>& receiver, string delimiter)
 	{
 		return new OpList(receiver, delimiter);
@@ -105,27 +110,25 @@ namespace Oparse
 	OpNumericValidator * _MAX(double max)
 	{
 		stringstream ss;
-		ss << "Value must not be larger than " << max << "!";
+		ss << "Value must not be larger than " << max;
 		return new OpNumericValidator(
-			[&](double value) { return value <= max; },
+			[max](double value) { return value <= max; },
 			ss.str());
 	}
 
 	OpNumericValidator * _MIN(double min)
 	{
 		stringstream ss;
-		ss << "Value must be smaller than " << min << "!";
-		return new OpNumericValidator(
-			[&](double value) { return value >= min; },
+		ss << "Value must not be smaller than " << min;
+		return new OpNumericValidator([min](double value) { return value >= min; },
 			ss.str());
 	}
 
 	OpNumericValidator * _RANGE(double min, double max)
 	{
 		stringstream ss;
-		ss << "Value must be between " << min << " and " << max << "!";
-		return new OpNumericValidator(
-			[&](double value) { return value >= min && value <= max; },
+		ss << "Value must be between " << min << " and " << max;
+		return new OpNumericValidator([min, max](double value) { return value >= min && value <= max; },
 			ss.str());
 	}
 

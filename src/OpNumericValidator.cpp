@@ -11,11 +11,10 @@ namespace Oparse
 
 		bool validationFailed = false;
 		OP_TYPE type = value->GetType();
+		void *val = value->GetValue();
 
 		if (isApplicableTo(value))
 		{
-			void *val = value->GetValue();
-
 			if (type == OP_LIST)
 			{
 				auto listType = ((OpList*)value)->GetListType();
@@ -28,7 +27,7 @@ namespace Oparse
 			}
 			else
 			{
-				validationFailed = predicate(*(double*)val);
+				validationFailed = !predicate((*(double*)val));
 			}
 		}
 		else
@@ -36,7 +35,12 @@ namespace Oparse
 			result.AddWarning(paramName, "Numeric Validator is not applicable to " + OpValue::GetTypeDescriptionFor(type));
 		}
 
-		if (validationFailed) result.AddError(paramName, errormsg);
+		if (validationFailed)
+		{
+			stringstream ss;
+			ss << errormsg << ", instead is " << *(double*)val << "!";
+			result.AddError(paramName, ss.str());
+		}
 	}
 
 	bool Oparse::OpNumericValidator::isApplicableTo(OpValue * value)

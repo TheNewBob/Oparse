@@ -15,6 +15,35 @@ namespace Oparse
 	const string OP_GENERAL_ERROR = "OP_GENERAL_ERROR";
 	const string DO_NOT_PARSE = "$DO_NOT_PARSE$";
 
+
+	OpModelDef MergeModelDefs(const OpModelDef & def1, const OpModelDef & def2)
+	{
+		OpModelDef mergedDef = def1;
+		for (auto i = def2.begin(); i != def2.end(); ++i)
+		{
+			auto mapping = mergedDef.find(i->first);
+			if (mapping != mergedDef.end())
+			{
+				// release allocated parsers and validators from def1 before overwriting them
+				delete mapping->second.first;
+				auto &validators = mapping->second.second;
+				for (unsigned int j = 0; j < validators.size(); ++j)
+				{
+					delete validators[j];
+				}
+				// overvrite the value with the one in def2
+				mapping->second = i->second;
+			}
+			else
+			{
+				// the value is not in def1, making things a lot easier
+				mergedDef[i->first] = i->second;
+			}
+		}
+		return mergedDef;
+	}
+
+
 	pair<string, string> splitParamAndValue(const string &configline)
 	{
 		vector<string> tokens;
@@ -75,7 +104,7 @@ namespace Oparse
 						result.AddError(OP_GENERAL_ERROR, "Block nested in BlockList is not allowed: " + l + ", aborting!");
 						throw runtime_error("Aborted parsing due to fatal error!");
 					}
-					string blockname = lowercaseLine.substr(6, lowercaseLine.length());
+					string blockname = lowercaseLine.substr(6);
 					auto parser = GetParamFromMapping(blockname, mapping);
 					if (parser != NULL)
 					{
@@ -110,7 +139,7 @@ namespace Oparse
 					{
 						// magic to enable some syntactical sugar in the cfg (END_FOO closes block BEGIN_FOO BAR)
 						vector<string> paramTokens;
-						SplitString(lowercaseLine, paramTokens, "_ \t");
+						SplitString(lowercaseLine.substr(4), paramTokens, " \t");
 						if (paramTokens.size() == 0)
 						{
 							result.AddError(blockList, "END_ without block specifier!");
@@ -118,14 +147,14 @@ namespace Oparse
 						else if (StringBeginsWith(blockList, DO_NOT_PARSE))
 						{
 							auto beginingOfName = DO_NOT_PARSE.length();
-							auto endOfName = beginingOfName + paramTokens[1].length();
-							if (blockList.compare(beginingOfName, endOfName, paramTokens[1]) == 0)
+							auto lengthOfName = paramTokens[0].length();
+							if (blockList.compare(beginingOfName, lengthOfName, paramTokens[0]) == 0)
 							{
 								// A block that is not mapped has ended
 								blockList = "";
 							}
 						}
-						else if (paramTokens[1] != blockList.substr(0, paramTokens[1].length()))
+						else if (paramTokens[0] != blockList.substr(0, paramTokens[0].length()))
 						{
 							result.AddError(blockList, "Unexpected end of block: " + l + ". Expected END_" + blockList + "!");
 						}

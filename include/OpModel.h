@@ -75,7 +75,7 @@ namespace Oparse
 		void ParseValue(OpFile *file, PARSINGRESULT &result)
 		{
 			if (!WasParsed()) receiver.clear();
-			T newModel = new T;
+			T *newModel = new T;
 			mapping = newModel->GetModelDef();
 			receiver.push_back(newModel);
 			ParseBlock(file, mapping, result);

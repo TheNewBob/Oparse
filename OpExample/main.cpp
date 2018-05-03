@@ -53,7 +53,7 @@ int main()
 		{ "test", { _Param(pi), {} } },
 		{ "answer",{ _Param(answer),{ _REQUIRED() } } },
 		{ "sqrt2",{ _Param(sqrt2),{} } },
-		{ "pi",{ _Param(pi), {_MAX(3.5)} } },
+		{ "pi",{ _Param(pi), {_MAX(3.5), _MIN(0.0)} } },
 		{ "question",{ _Param(question), {} } },
 		{ "makesSense",{ _Param(makesSense),{ _REQUIREDBY("answer", 42) } } },
 		{ "vector3", { _Param(vector3), { _REQUIREDBY("test") } } },
