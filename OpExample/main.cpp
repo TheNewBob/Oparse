@@ -46,7 +46,7 @@ int main()
 	vector<MixedListDemo> blockDemo;
 	
 	MyModel myModel;
-	
+	vector<MyModel> modelList;
 
 	vector<string>() = {};
 	OpModelDef model = {
@@ -65,7 +65,7 @@ int main()
 		{ "vector3List", { _List(vector3List), {} } },
 		{ "mixedList", { mixedList.GetMapping(), {} } },
 		{ "BLOCKLIST 1", { _Block<MixedListDemo>(blockDemo), {} } },
-		{ "MODEL 1", { _Model<MyModel>(myModel), {} } }
+		{ "MODEL 1", { _ModelFactory<MyModel>(modelList), {} } },
 	};
 
 	auto result = Oparse::ParseFile(

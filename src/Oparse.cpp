@@ -86,7 +86,7 @@ namespace Oparse
 		
 		MakeMappingKeysLowerCase(mapping);
 
-		while (file->NextLine(l) && !endOfBlock)
+		while (!endOfBlock && file->NextLine(l))
 		{
 			// remove comments, i.e. everything left of a ;, as well as leading and trailing whitespace
 			if (l.find_first_of(';') != std::string::npos)

@@ -37,7 +37,7 @@ namespace Oparse
 	OpInt *_Param(int &receiver);
 	OpFloat *_Param(float &receiver);
 	OpDouble *_Param(double &receiver);
-	OpString *_Param(string &receiver);
+	OpString *_Param(string &receiver, bool tolower = false);
 	OpBool *_Param(bool &receiver);
 	OpVector3 *_Param(VECTOR3 &receiver);
 	OpLambda * _Param(function<string(string value)> lambda, bool tolower = false);

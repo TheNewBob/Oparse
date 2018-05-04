@@ -74,7 +74,7 @@ namespace Oparse
 
 		void ParseValue(OpFile *file, PARSINGRESULT &result)
 		{
-			if (!WasParsed()) receiver.clear();
+			//if (!WasParsed()) receiver.clear();
 			T *newModel = new T;
 			mapping = newModel->GetModelDef();
 			receiver.push_back(newModel);
@@ -108,10 +108,9 @@ namespace Oparse
 
 		void ParseValue(OpFile *file, PARSINGRESULT &result)
 		{
-			if (!WasParsed()) receiver.clear();
-			T newModel;
-			mapping = newModel.GetModelDef();
-			receiver.push_back(newModel);
+			//if (!WasParsed()) receiver.clear();
+			receiver.push_back(T());
+			mapping = receiver.back().GetModelDef();
 			ParseBlock(file, mapping, result);
 			setParsed();
 		}

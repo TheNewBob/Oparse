@@ -20,9 +20,9 @@ namespace Oparse
 		return new OpDouble(receiver);
 	}
 
-	OpString *_Param(string & receiver)
+	OpString *_Param(string & receiver, bool tolower)
 	{
-		return new OpString(receiver);
+		return new OpString(receiver, tolower);
 	}
 
 	OpBool * _Param(bool & receiver)
