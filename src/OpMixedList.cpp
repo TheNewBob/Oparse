@@ -41,6 +41,16 @@ namespace Oparse
 		}
 	}
 
+	string OpMixedList::ValueAsString()
+	{
+		stringstream ss;
+		for (unsigned int i = 0; i < receivers.size(); ++i)
+		{
+			ss << receivers[i].first->ValueAsString() << delimiter;
+		}
+		string result = ss.str();
+		return result.substr(0, result.find_last_of(delimiter));
+	}
 
 	void OpMixedList::Validate(string paramName, PARSINGRESULT & result)
 	{

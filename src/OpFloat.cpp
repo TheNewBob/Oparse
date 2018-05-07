@@ -27,4 +27,8 @@ namespace Oparse
 			result.AddError(key, "Type mismatch: Unable to convert \"" + value + "\" to float!");
 		}
 	}
+	string OpFloat::ValueAsString()
+	{
+		return to_string(receiver);
+	}
 }

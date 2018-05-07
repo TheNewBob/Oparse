@@ -126,6 +126,63 @@ namespace Oparse
 
 		}
 	}
+
+	string OpList::ValueAsString()
+	{
+		stringstream ss;
+		if (listType == OP_INT)
+		{
+			auto rec = ((vector<int>*)receiver);
+			for (auto i = rec->begin(); i != rec->end(); ++i)
+			{
+				ss << (*i) << delimiter;
+			}
+		}
+		else if (listType == OP_FLOAT)
+		{
+			auto rec = ((vector<float>*)receiver);
+			for (auto i = rec->begin(); i != rec->end(); ++i)
+			{
+				ss << (*i) << delimiter;
+			}
+		}
+		else if (listType == OP_DOUBLE)
+		{
+			auto rec = ((vector<double>*)receiver);
+			for (auto i = rec->begin(); i != rec->end(); ++i)
+			{
+				ss << (*i) << delimiter;
+			}
+		}
+		else if (listType == OP_BOOL)
+		{
+			auto rec = ((vector<bool>*)receiver);
+			for (auto i = rec->begin(); i != rec->end(); ++i)
+			{
+				ss << (*i) << delimiter;
+			}
+		}
+		else if (listType == OP_STRING)
+		{
+			auto rec = ((vector<string>*)receiver);
+			for (auto i = rec->begin(); i != rec->end(); ++i)
+			{
+				ss << (*i) << delimiter;
+			}
+		}
+		else if (listType == OP_VECTOR3)
+		{
+			auto rec = ((vector<VECTOR3>*)receiver);
+			for (auto i = rec->begin(); i != rec->end(); ++i)
+			{
+				ss << (*i).x << " " << (*i).y << " " << (*i).z << delimiter;
+			}
+		}
+
+		//cut of the last delimiter
+		string result = ss.str();
+		return result.substr(0, result.find_last_of(delimiter));
+	}
 }
 
 

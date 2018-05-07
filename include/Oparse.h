@@ -72,6 +72,7 @@ namespace Oparse
 
 #ifdef OPARSE_STANDALONE
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping);
+	void WriteFile(string path, OpModelDef &mapping);
 #else
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping, PathRoot root = ROOT);
 	PARSINGRESULT ParseFile(FILEHANDLE file, OpModelDef &mapping, string filename = "unspecified");

@@ -48,10 +48,38 @@ namespace Oparse
 			validateParsedMap(mapping, result);
 		}
 
+		void Serialize(string key, stringstream &stream, unsigned int indents)
+		{
+			string tabs;
+			for (unsigned int i = 0; i < indents; ++i)
+			{
+				tabs += "\t";
+			}
+
+			stream << tabs << "BEGIN_" << key << endl << valueAsString(indents + 1) << tabs << "END_" << key << endl;
+		}
+
+		string ValueAsString()
+		{
+			return valueAsString(0);
+		}
+
 		void *GetValue() { return NULL; };
 
 	private:
 		OpModelDef mapping;
+
+		string valueAsString(unsigned int indents)
+		{
+			stringstream ss;
+			for (auto i = mapping.begin(); i != mapping.end(); ++i)
+			{
+				i->second.first->Serialize(i->first, ss, indents);
+			}
+
+			return ss.str();
+		}
+
 	};
 
 
@@ -76,22 +104,34 @@ namespace Oparse
 		{
 			//if (!WasParsed()) receiver.clear();
 			T *newModel = new T;
-			mapping = newModel->GetModelDef();
+			OpModelDef mapping = newModel->GetModelDef();
 			receiver.push_back(newModel);
 			ParseBlock(file, mapping, result);
 			setParsed();
-		}
+			clearModelDef(mapping);
+		};
 
 		void Validate(PARSINGRESULT &result)
 		{
-			validateParsedMap(mapping, result);
-		}
+			for (unsigned int i = 0; i < receiver.size(); ++i)
+			{
+				OpModelDef mapping = receiver[i]->GetModelDef();
+				validateParsedMap(mapping, result);
+				clearModelDef(mapping);
+			}
+		};
+
+		void Serialize(string key, stringstream &stream, unsigned int indents)
+		{
+			throw runtime_error("OpModelPtrFactory cannot be serialized!");
+		};
+
+		string ValueAsString() { return ""; };
 
 		void *GetValue() { return &receiver; };
 
 	private:
 		vector<U*> &receiver;
-		OpModelDef mapping;
 	};
 
 	/**
@@ -104,27 +144,39 @@ namespace Oparse
 	public:
 
 		OpModelFactory<T>(vector<T> &receiver) : OpNestable(OP_MODELFACTORY), receiver(receiver) {};
-		virtual ~OpModelFactory() { clearModelDef(mapping); };
+		virtual ~OpModelFactory() {};
 
 		void ParseValue(OpFile *file, PARSINGRESULT &result)
 		{
 			//if (!WasParsed()) receiver.clear();
 			receiver.push_back(T());
-			mapping = receiver.back().GetModelDef();
+			OpModelDef mapping = receiver.back().GetModelDef();
 			ParseBlock(file, mapping, result);
 			setParsed();
+			clearModelDef(mapping);
 		}
 
 		void Validate(PARSINGRESULT &result)
 		{
-			validateParsedMap(mapping, result);
+			for (unsigned int i = 0; i < receiver.size(); ++i)
+			{
+				OpModelDef mapping = receiver[i].GetModelDef();
+				validateParsedMap(mapping, result);
+				clearModelDef(mapping);
+			}
 		}
 
 		void *GetValue() { return &receiver; };
 
+		void Serialize(string key, stringstream &stream, unsigned int indents)
+		{
+			throw runtime_error("OpModelFactory cannot be serialized!");
+		};
+
+		string ValueAsString() { return ""; };
+
 	private:
 		vector<T> &receiver;
-		OpModelDef mapping;
 	};
 
 }

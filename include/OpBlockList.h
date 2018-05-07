@@ -47,6 +47,22 @@ namespace Oparse
 			setParsed();
 		}
 
+		void Serialize(string key, stringstream & stream, unsigned int indents)
+		{
+			string tabs;
+			for (unsigned int i = 0; i < indents; ++i)
+			{
+				tabs += "\t";
+			}
+			stream << tabs << "BEGIN_" << key << endl << valueAsString(indents + 1) << tabs << "END_" << key << endl;
+		}
+
+		string ValueAsString()
+		{
+			return valueAsString(0);
+		}
+
+
 		void *GetValue() { return NULL; };
 
 		void Validate(string paramName, PARSINGRESULT &result)
@@ -71,5 +87,36 @@ namespace Oparse
 		vector<T> &receiver;
 		vector<T*> &ptrReceiver;
 		bool ptrs = false;
+
+		string valueAsString(unsigned int indents)
+		{
+			string tabs;
+			for (unsigned int i = 0; i < indents; ++i)
+			{
+				tabs += "\t";
+			}
+
+			stringstream ss;
+			if (ptrs)
+			{
+				for (unsigned int i = 0; i < ptrReceiver.size(); ++i)
+				{
+					OpMixedList *mapping = ptrReceiver[i]->GetMapping();
+					ss << tabs << mapping->ValueAsString() << endl;
+					delete mapping;
+				}
+			}
+			else
+			{
+				for (unsigned int i = 0; i < receiver.size(); ++i)
+				{
+					OpMixedList *mapping = receiver[i].GetMapping();
+					ss << tabs << mapping->ValueAsString() << endl;
+					delete mapping;
+				}
+			}
+			return ss.str();
+
+		}
 	};
 }

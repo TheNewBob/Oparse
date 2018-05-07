@@ -28,4 +28,9 @@ namespace Oparse
 			result.AddError(key, "Type mismatch: Unable to convert \"" + value + "\" to double!");
 		}
 	}
+
+	string OpDouble::ValueAsString()
+	{
+		return to_string(receiver);
+	}
 }

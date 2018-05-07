@@ -132,9 +132,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DemoModel.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DemoModel.h" />
     <ClInclude Include="MyModel.h" />
     <ClInclude Include="NestedModel.h" />
   </ItemGroup>

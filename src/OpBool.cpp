@@ -32,4 +32,9 @@ namespace Oparse
 			result.AddError(key, "Type mismatch: unable to convert \"" + value + "\" to bool!");
 		}
 	}
+
+	string OpBool::ValueAsString()
+	{
+		return to_string(receiver);
+	}
 }

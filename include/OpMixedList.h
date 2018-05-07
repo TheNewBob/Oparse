@@ -12,9 +12,11 @@ namespace Oparse
 		OpMixedList(OpValues receivers, string delimiter = "\t");
 		~OpMixedList();
 
-		virtual void ParseValue(string key, string value, PARSINGRESULT &result);
+		void ParseValue(string key, string value, PARSINGRESULT &result);
 
 		void *GetValue() { return &receivers; };
+
+		string ValueAsString();
 
 		void Validate(string paramName, PARSINGRESULT &result);
 

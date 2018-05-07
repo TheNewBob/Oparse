@@ -24,6 +24,17 @@ namespace Oparse
 		}
 
 		void *GetValue() { return NULL; };
+
+		void Serialize(string key, stringstream &stream)
+		{
+			throw runtime_error("OpLambda cannot be serialized!");
+		};
+
+		string ValueAsString()
+		{
+			return string("");
+		};
+
 	private:
 		function<string(string value)> lambda = NULL;
 		bool tolower;

@@ -9,6 +9,7 @@ namespace Oparse
 	public:
 
 		virtual bool NextLine(string &OUT_line) = 0;
+		virtual void WriteStream(stringstream &stream) = 0;
 	};
 
 #ifdef OPARSE_STANDALONE
@@ -16,13 +17,15 @@ namespace Oparse
 		: public OpFile
 	{
 	public:
-		OpStandaloneFile(string filename);
+		OpStandaloneFile(string filename, bool write = false);
 		~OpStandaloneFile();
 
 		bool NextLine(string &OUT_line);
 
+		void WriteStream(stringstream &stream);
+
 	private:
-		ifstream file;
+		fstream file;
 	};
 #else
 	class OpOrbiterFile

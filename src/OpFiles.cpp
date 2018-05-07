@@ -9,9 +9,16 @@ namespace Oparse
 
 #ifdef OPARSE_STANDALONE
 
-	OpStandaloneFile::OpStandaloneFile(string filename)
+	OpStandaloneFile::OpStandaloneFile(string filename, bool write)
 	{
-		file.open(filename);
+		if (write)
+		{
+			file.open(filename, ios::out);
+
+		}
+		else {
+			file.open(filename, ios::in);
+		}
 		if (!file.is_open()) throw runtime_error("Could not open file: " + filename);
 	}
 
@@ -24,6 +31,11 @@ namespace Oparse
 	{
 		getline(file, OUT_line);
 		return !file.eof();
+	}
+
+	void OpStandaloneFile::WriteStream(stringstream & stream)
+	{
+		file << stream.str();
 	}
 
 #else

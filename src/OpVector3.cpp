@@ -33,4 +33,11 @@ namespace Oparse
 			result.AddError(key, "Type mismatch: Unable to convert \"" + value + "\" to VECTOR3!");
 		}
 	}
+
+	string OpVector3::ValueAsString()
+	{
+		stringstream ss;
+		ss << receiver.x << " " << receiver.y << " " << receiver.z;
+		return ss.str();
+	}
 }

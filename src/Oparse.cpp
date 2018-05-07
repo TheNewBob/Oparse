@@ -261,6 +261,18 @@ namespace Oparse
 		}
 	}
 
+	void writeToFile(OpFile *file, OpModelDef &mapping)
+	{
+		stringstream result;
+
+		for (auto i = mapping.begin(); i != mapping.end(); ++i)
+		{
+			i->second.first->Serialize(i->first, result, 0);
+		}
+
+		file->WriteStream(result);
+	}
+
 
 #ifdef OPARSE_STANDALONE
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping)
@@ -271,6 +283,7 @@ namespace Oparse
 		{
 			OpStandaloneFile *file = new OpStandaloneFile(path);
 			parseFile(file, mapping, result);
+			delete file;
 		}
 		catch (runtime_error e)
 		{
@@ -278,6 +291,16 @@ namespace Oparse
 		}
 		return result;
 	}
+
+
+	void WriteFile(string path, OpModelDef & mapping)
+	{
+		OpStandaloneFile *file = new OpStandaloneFile(path, true);
+		writeToFile(file, mapping);
+		delete file;
+	}
+
+
 #else
 
 

@@ -30,6 +30,18 @@ namespace Oparse
 		 * \throws if no sense could be made of the value (usually because it's of the wrong type).
 		 */
 		virtual void ParseValue(string key, string value, PARSINGRESULT &result) = 0;
+
+		virtual void Serialize(string key, stringstream &stream, unsigned int indents)
+		{
+			string tabs = "";
+			for (unsigned int i = 0; i < indents; ++i)
+			{
+				tabs += "\t";
+			}
+			stream << tabs << key << " = " << ValueAsString() << endl;
+		}
+
+		virtual string ValueAsString() = 0;
 		
 		/**
 		 * \return True if this value was parsed, false if not.

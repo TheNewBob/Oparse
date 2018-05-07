@@ -33,4 +33,9 @@ namespace Oparse
 			result.AddError(key, "Type mismatch: Unable to convert \"" + value + "\" to string!");
 		}
 	}
+
+	string OpString::ValueAsString()
+	{
+		return receiver;
+	}
 }
