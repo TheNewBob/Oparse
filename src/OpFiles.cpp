@@ -62,6 +62,18 @@ namespace Oparse
 		return result;
 	}
 
+	void OpOrbiterFile::WriteStream(stringstream & stream)
+	{
+		char line[2048];
+		while (!stream.eof())
+		{
+			stream.getline(line, 2048);
+			oapiWriteLine(file, line);
+		}
+
+
+	}
+
 	void OpOrbiterFile::resetFile()
 	{
 		char l[500];

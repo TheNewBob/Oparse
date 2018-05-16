@@ -4,7 +4,7 @@ struct MixedListDemo {
 	string first = "";
 	string second = "";
 	string third = "";
-	Oparse::VECTOR3 vector3;
+	VECTOR3 vector3;
 	bool testSuccessful = false;
 
 	Oparse::OpMixedList *GetMapping();
@@ -20,20 +20,20 @@ public:
 	string question = "";
 	bool makesSense = true;
 	bool isNotHere = true;
-	Oparse::VECTOR3 vector3;
+	VECTOR3 vector3;
 
 	vector<int> intList;
 	vector<double> floatList;
 	vector<bool> boolList;
 	vector<string> stringList;
-	vector<Oparse::VECTOR3> vector3List;
+	vector<VECTOR3> vector3List;
 
 	MixedListDemo mixedList;
 	vector<MixedListDemo> blockDemo;
 
 	MyModel myModel;
 
-	Oparse::OpModelDef GetModelDef();
+	OpModelDef GetModelDef();
 
 
 };

@@ -40,6 +40,16 @@ namespace Oparse
 		map<string, vector<string>> GetWarnings() { return warnings; };
 
 		/**
+		* \brief Add a string to the list of unparsed lines.
+		*/
+		void AddUnparsedLine(string line) { unparsedLines.push_back(line); };
+
+		/**
+		 * \return A vector with any lines in the file that were not parsed by Oparse.
+		 */
+		vector<string> GetUnparsedLines() { return unparsedLines; };
+
+		/**
 		 * \brief Returns a completely formatted error message for the given parameter, or an empty string if there are no errors for this parameter.
 		 * \return A message formated like this: Parsing error in <filename> for parameter <paramname>: \n\t<error message>\n\t<error message>\n\t etc.
 		 */
@@ -75,6 +85,7 @@ namespace Oparse
 	private:
 		map<string, vector<string>> errors;
 		map<string, vector<string>> warnings;
+		vector<string> unparsedLines;
 
 		string getErrorsFor(string paramname, unsigned int numTabs)
 		{

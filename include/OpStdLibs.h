@@ -4,9 +4,8 @@
 #include <map>
 #include <sstream>
 #include <functional>
-#ifdef OPARSE_STANDALONE
 #include <fstream>
-#else
+#ifndef OPARSE_STANDALONE
 #include "orbitersdk.h"
 #endif
 

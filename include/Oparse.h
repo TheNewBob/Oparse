@@ -70,12 +70,13 @@ namespace Oparse
 
 	OpModelDef MergeModelDefs(const OpModelDef &defOne, const OpModelDef &def2);
 
-#ifdef OPARSE_STANDALONE
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping);
 	void WriteFile(string path, OpModelDef &mapping);
-#else
+
+#ifndef OPARSE_STANDALONE
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping, PathRoot root = ROOT);
 	PARSINGRESULT ParseFile(FILEHANDLE file, OpModelDef &mapping, string filename = "unspecified");
+	void WriteToFile(FILEHANDLE file, OpModelDef &mapping);
 #endif
 	
 

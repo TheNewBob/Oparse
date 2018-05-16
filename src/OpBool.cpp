@@ -35,6 +35,7 @@ namespace Oparse
 
 	string OpBool::ValueAsString()
 	{
-		return to_string(receiver);
+		if (receiver) return "true";
+		else return "false";
 	}
 }

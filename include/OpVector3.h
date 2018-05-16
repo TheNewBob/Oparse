@@ -1,17 +1,17 @@
 #pragma once
 
-namespace Oparse
-{
-
 #ifdef OPARSE_STANDALONE
-	struct VECTOR3
-	{
-		double x = 0;
-		double y = 0;
-		double z = 0;
-	};
+struct VECTOR3
+{
+	double x = 0;
+	double y = 0;
+	double z = 0;
+};
 #endif
 
+
+namespace Oparse
+{
 	class OpVector3 :
 		public OpValue
 	{

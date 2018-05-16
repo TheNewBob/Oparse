@@ -125,6 +125,7 @@ namespace Oparse
 					{
 						// this is a block that is not mapped.
 						blockList = DO_NOT_PARSE + blockname;
+						result.AddUnparsedLine(l);
 					}
 				}
 				// Check if this is the end of a block
@@ -152,6 +153,7 @@ namespace Oparse
 							{
 								// A block that is not mapped has ended
 								blockList = "";
+								result.AddUnparsedLine(l);
 							}
 						}
 						else if (paramTokens[0] != blockList.substr(0, paramTokens[0].length()))
@@ -177,6 +179,8 @@ namespace Oparse
 							OpValue *parser = GetParamFromMapping(keyValue.first, mapping);
 							if (parser != NULL)
 								parser->ParseValue(keyValue.first, keyValue.second, result);
+							else
+								result.AddUnparsedLine(l);
 						}
 						else
 						{
@@ -184,7 +188,13 @@ namespace Oparse
 							OpValue *parser = GetParamFromMapping(blockList, mapping);
 							if (parser != NULL)
 								parser->ParseValue(blockList, l, result);
+							else
+								result.AddUnparsedLine(l);
 						}
+					}
+					else
+					{
+						result.AddUnparsedLine(l);
 					}
 				}
 
@@ -274,7 +284,6 @@ namespace Oparse
 	}
 
 
-#ifdef OPARSE_STANDALONE
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping)
 	{
 		PARSINGRESULT result;
@@ -301,7 +310,7 @@ namespace Oparse
 	}
 
 
-#else
+#ifndef OPARSE_STANDALONE
 
 
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping, PathRoot root)
@@ -334,6 +343,13 @@ namespace Oparse
 			result.AddError(OP_GENERAL_ERROR, e.what());
 		}
 		return result;
+	}
+
+	void WriteToFile(FILEHANDLE file, OpModelDef &mapping)
+	{
+		OpFile *opFile = new OpOrbiterFile(file);
+		writeToFile(opFile, mapping);
+		delete file;
 	}
 
 #endif

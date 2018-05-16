@@ -12,7 +12,6 @@ namespace Oparse
 		virtual void WriteStream(stringstream &stream) = 0;
 	};
 
-#ifdef OPARSE_STANDALONE
 	class OpStandaloneFile
 		: public OpFile
 	{
@@ -27,7 +26,8 @@ namespace Oparse
 	private:
 		fstream file;
 	};
-#else
+
+#ifndef OPARSE_STANDALONE
 	class OpOrbiterFile
 		: public OpFile
 	{
@@ -36,6 +36,7 @@ namespace Oparse
 		OpOrbiterFile(FILEHANDLE file);
 		~OpOrbiterFile() {};
 		bool NextLine(string &OUT_line);
+		void WriteStream(stringstream &stream);
 
 	private:
 		void resetFile();
