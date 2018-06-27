@@ -27,6 +27,21 @@ namespace Oparse
 		fstream file;
 	};
 
+	class OpMemoryFile
+		: public OpFile
+	{
+	public:
+		OpMemoryFile(string contents);
+		~OpMemoryFile() {};
+
+		bool NextLine(string &OUT_line);
+		void WriteStream(stringstream &stream);
+
+		string ToString();
+	private:
+		stringstream contents;
+	};
+
 #ifndef OPARSE_STANDALONE
 	class OpOrbiterFile
 		: public OpFile

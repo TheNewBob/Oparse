@@ -7,7 +7,7 @@
 namespace Oparse
 {
 
-#ifdef OPARSE_STANDALONE
+
 
 	OpStandaloneFile::OpStandaloneFile(string filename, bool write)
 	{
@@ -38,8 +38,7 @@ namespace Oparse
 		file << stream.str();
 	}
 
-#else
-
+#ifndef OPARSE_STANDALONE
 	OpOrbiterFile::OpOrbiterFile(string filename, PathRoot root)
 	{
 		file = oapiOpenFile(filename.data(), FILE_IN_ZEROONFAIL, root);
@@ -79,7 +78,22 @@ namespace Oparse
 		char l[500];
 		oapiReadItem_string(file, (char*)"Module", l);
 	}
-
 #endif
 
+	OpMemoryFile::OpMemoryFile(string contents) : contents(contents) {}
+
+	bool OpMemoryFile::NextLine(string & OUT_line)
+	{
+		getline(contents, OUT_line);
+		return !contents.eof();
+	}
+	void OpMemoryFile::WriteStream(stringstream & stream)
+	{
+		contents << stream.str();
+	}
+
+	string OpMemoryFile::ToString()
+	{
+		return contents.str();
+	}
 }

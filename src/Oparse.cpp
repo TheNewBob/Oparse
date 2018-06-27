@@ -92,6 +92,8 @@ namespace Oparse
 			if (l.find_first_of(';') != std::string::npos)
 				l.erase(l.find_first_of(';'), std::string::npos);
 			l = RemoveExtraWhiteSpace(l);
+			// interpret four spaces as tab
+			l = StringReplace(l, "    ", "\t");
 
 			if (l != "")
 			{
@@ -307,6 +309,31 @@ namespace Oparse
 		OpStandaloneFile *file = new OpStandaloneFile(path, true);
 		writeToFile(file, mapping);
 		delete file;
+	}
+
+	PARSINGRESULT ParseString(string data, OpModelDef & mapping, string name)
+	{
+		PARSINGRESULT result;
+		result.filename = name;
+		try
+		{
+			OpMemoryFile *memfile = new OpMemoryFile(data);
+			parseFile(memfile, mapping, result);
+			delete memfile;
+		}
+		catch (runtime_error e)
+		{
+			result.AddError(OP_GENERAL_ERROR, e.what());
+		}
+		return result;
+	}
+
+	void WriteString(string &OUT_receiver, OpModelDef & mapping)
+	{
+		OpMemoryFile *memfile = new OpMemoryFile("");
+		writeToFile(memfile, mapping);
+		OUT_receiver = memfile->ToString();
+		delete memfile;
 	}
 
 

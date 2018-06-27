@@ -35,5 +35,7 @@ public:
 
 	OpModelDef GetModelDef();
 
+	vector<string> words;
+
 
 };

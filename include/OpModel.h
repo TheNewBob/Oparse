@@ -21,13 +21,14 @@ namespace Oparse
 		virtual ~OpNestable() {};
 		virtual void ParseValue(OpFile *file, PARSINGRESULT &result) = 0;
 		virtual void Validate(PARSINGRESULT &result) = 0;
+
 	private:
 		void ParseValue(string key, string value, PARSINGRESULT &result) { throw runtime_error("ParseValue(string, string, PARSINGRESULT&) should never be called on a nestable class!"); };
 	};
 
 
 	/**
- 	 * \brief Maps a model of type T that provides a method with signature OpModelDef GetModelDef().
+ 	 * \brief Maps an instantiated model of type T that provides a method with signature OpModelDef GetModelDef().
 	 */
 	template <class T>
 	class OpModel
@@ -35,6 +36,7 @@ namespace Oparse
 	{
 	public:
 		OpModel(T &receiver) : OpNestable(OP_MODEL), mapping(receiver.GetModelDef()) {}
+		OpModel(T *receiver) : OpNestable(OP_MODEL), mapping(receiver->GetModelDef()) {}
 		virtual ~OpModel() { clearModelDef(mapping); };
 
 		void ParseValue(OpFile *file, PARSINGRESULT &result)
@@ -83,12 +85,11 @@ namespace Oparse
 	};
 
 
-
 	/**
 	 * \brief Allocates a new model on the fly and adds a pointer to it to the passed vector.
 	 */
 	template <class T, class U>
-	class OpModelPtrFactory
+	class OpModelFactory
 		: public OpNestable
 	{
 	public:
@@ -97,27 +98,31 @@ namespace Oparse
 		 * \brief Creates a model factory where T is the type to be instatiated, and U is the type in which the models are stored.
 		 * \note It is expected that T inherits U, and that T provides a method OpModelDef GetModelDef().
 		 */
-		OpModelPtrFactory<T, U>(vector<U*> &receiver) : OpNestable(OP_MODELFACTORY), receiver(receiver) {};
-		virtual ~OpModelPtrFactory() { clearModelDef(mapping); };
+		OpModelFactory<T, U>(vector<U*> &receiver) : OpNestable(OP_MODELFACTORY), receiver(receiver) {};
+		virtual ~OpModelFactory() 
+		{
+			for (unsigned int i = 0; i < modeldefs.size(); ++i)
+			{
+				clearModelDef(modeldefs[i]);
+			}
+		};
 
 		void ParseValue(OpFile *file, PARSINGRESULT &result)
 		{
 			//if (!WasParsed()) receiver.clear();
 			T *newModel = new T;
 			OpModelDef mapping = newModel->GetModelDef();
+			modeldefs.push_back(mapping);
 			receiver.push_back(newModel);
 			ParseBlock(file, mapping, result);
 			setParsed();
-			clearModelDef(mapping);
 		};
 
 		void Validate(PARSINGRESULT &result)
 		{
-			for (unsigned int i = 0; i < receiver.size(); ++i)
+			for (unsigned int i = 0; i < modeldefs.size(); ++i)
 			{
-				OpModelDef mapping = receiver[i]->GetModelDef();
-				validateParsedMap(mapping, result);
-				clearModelDef(mapping);
+				validateParsedMap(modeldefs[i], result);
 			}
 		};
 
@@ -132,51 +137,7 @@ namespace Oparse
 
 	private:
 		vector<U*> &receiver;
-	};
-
-	/**
-	* \brief Allocates a new model on the fly and it to the passed vector.
-	*/
-	template <class T>
-	class OpModelFactory
-		: public OpNestable
-	{
-	public:
-
-		OpModelFactory<T>(vector<T> &receiver) : OpNestable(OP_MODELFACTORY), receiver(receiver) {};
-		virtual ~OpModelFactory() {};
-
-		void ParseValue(OpFile *file, PARSINGRESULT &result)
-		{
-			//if (!WasParsed()) receiver.clear();
-			receiver.push_back(T());
-			OpModelDef mapping = receiver.back().GetModelDef();
-			ParseBlock(file, mapping, result);
-			setParsed();
-			clearModelDef(mapping);
-		}
-
-		void Validate(PARSINGRESULT &result)
-		{
-			for (unsigned int i = 0; i < receiver.size(); ++i)
-			{
-				OpModelDef mapping = receiver[i].GetModelDef();
-				validateParsedMap(mapping, result);
-				clearModelDef(mapping);
-			}
-		}
-
-		void *GetValue() { return &receiver; };
-
-		void Serialize(string key, stringstream &stream, unsigned int indents)
-		{
-			throw runtime_error("OpModelFactory cannot be serialized!");
-		};
-
-		string ValueAsString() { return ""; };
-
-	private:
-		vector<T> &receiver;
+		vector<OpModelDef> modeldefs;
 	};
 
 }

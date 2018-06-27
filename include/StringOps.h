@@ -18,4 +18,8 @@ namespace Oparse
 
 	bool StringBeginsWith(const string &str, const string beginsWith);
 
+	/**
+	* \brief Replaces all occurances of lookFor in str with replaceWith.
+	*/
+	string StringReplace(const string &str, const std::string& lookFor, const std::string& replaceWith);
 }

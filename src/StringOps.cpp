@@ -51,4 +51,22 @@ namespace Oparse
 	{
 		return (str.compare(0, beginsWith.length(), beginsWith) == 0);
 	}
+
+	string StringReplace(const string &str, const std::string& lookFor, const std::string& replaceWith) 
+	{
+		string result = str;
+		bool run = true;
+		while (run) {
+			size_t start_pos = result.find(lookFor);
+			if (start_pos != std::string::npos)
+			{
+				result.replace(start_pos, lookFor.length(), replaceWith);
+			}
+			else
+			{
+				run = false;
+			}
+		}
+		return result;
+	}
 }

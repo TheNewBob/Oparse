@@ -7,6 +7,7 @@ namespace Oparse
 	 * \brief A parameter that takes a lambda function to parse a value.
 	 * The lambda receives the value as a string, and expects an error string in return. A non-empty string 
 	 * received from the lambda will be added to the errors for this parameter.
+	 * \note Cannot be serialised.
 	 */
 	class OpLambda
 		: public OpValue
@@ -25,7 +26,7 @@ namespace Oparse
 
 		void *GetValue() { return NULL; };
 
-		void Serialize(string key, stringstream &stream)
+		virtual void Serialize(string key, stringstream &stream)
 		{
 			throw runtime_error("OpLambda cannot be serialized!");
 		};
@@ -35,9 +36,29 @@ namespace Oparse
 			return string("");
 		};
 
-	private:
+	protected:
 		function<string(string value)> lambda = NULL;
 		bool tolower;
+	};
+
+
+	/**
+	 * \brief A parameter that takes two lambdas, the first for parsing, the second for serialisation.
+	 */
+	class OpReadWriteLambda
+		: public OpLambda
+	{
+	public:
+		OpReadWriteLambda(function<string(string value)> readLambda, function<string()> writeLambda, bool tolower = false)
+			: OpLambda(readLambda, tolower), writeLambda(writeLambda) {};
+
+		void Serialize(string key, stringstream &stream)
+		{
+			stream << writeLambda();
+		};
+
+	private:
+		function<string()> writeLambda;
 	};
 
 }

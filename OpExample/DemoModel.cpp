@@ -8,6 +8,16 @@ using namespace Oparse;
 
 OpModelDef DemoModel::GetModelDef()
 {
+	// this is purely for demonstration of lambdas, to show that you can still exert a very high level of control if you need it for some things.
+	// this thing will read all the values of a certain parameter, that occurs multiple times,
+	// separates all the words and stores them in a single vector. It's a silly use case, as examples often are.
+	OpLambda *wordCollector = _Param([&](string value) {
+		vector<string> currentWords;
+		SplitString(value, currentWords, " ");
+		words.insert(words.end(), currentWords.begin(), currentWords.end());
+		return "";
+	});
+
 	return OpModelDef() = {
 		{ "test",{ _Param(pi),{} } },
 		{ "answer",{ _Param(answer),{ _REQUIRED() } } },
@@ -24,7 +34,8 @@ OpModelDef DemoModel::GetModelDef()
 		{ "vector3List",{ _List(vector3List),{} } },
 		{ "mixedList",{ mixedList.GetMapping(),{} } },
 		{ "BLOCKLIST 1",{ _Block<MixedListDemo>(blockDemo),{} } },
-		{ "Model 1",{ _Model<MyModel>(myModel),{} } }
+		{ "Model 1",{ _Model<MyModel>(myModel),{} } },
+		{ "lambdaDemo", { wordCollector, {} } }
 	};
 }
 

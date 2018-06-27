@@ -40,6 +40,11 @@ namespace Oparse
 		return new OpLambda(lambda, tolower);
 	}
 
+	OpReadWriteLambda * _Param(function<string(string value)> readLambda, function<string()> writeLambda, bool tolower)
+	{
+		return new OpReadWriteLambda(readLambda, writeLambda, tolower);
+	}
+
 	OpList *_List(vector<int>& receiver, string delimiter)
 	{
 		return new OpList(receiver, delimiter);
