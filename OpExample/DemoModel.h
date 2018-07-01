@@ -10,6 +10,37 @@ struct MixedListDemo {
 	Oparse::OpMixedList *GetMapping();
 };
 
+class PolymorphicFactoryDemo
+{
+public:
+	PolymorphicFactoryDemo() {};
+	virtual ~PolymorphicFactoryDemo() {};
+
+	string type = "";
+};
+
+class AlphaModel : public PolymorphicFactoryDemo
+{
+public:
+	AlphaModel() {};
+	~AlphaModel() {}
+
+	string alphaParam = "";
+
+	OpModelDef GetModelDef();
+};
+
+class BetaModel : public PolymorphicFactoryDemo
+{
+public:
+	BetaModel() {};
+	~BetaModel() {}
+
+	string betaParam = "";
+
+	OpModelDef GetModelDef();
+};
+
 
 class DemoModel
 {
@@ -30,12 +61,11 @@ public:
 
 	MixedListDemo mixedList;
 	vector<MixedListDemo> blockDemo;
+	vector<PolymorphicFactoryDemo*> modelFactoryDemo;
 
 	MyModel myModel;
 
 	OpModelDef GetModelDef();
 
 	vector<string> words;
-
-
 };

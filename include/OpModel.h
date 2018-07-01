@@ -128,7 +128,18 @@ namespace Oparse
 
 		void Serialize(string key, stringstream &stream, unsigned int indents)
 		{
-			throw runtime_error("OpModelPtrFactory cannot be serialized!");
+			//throw runtime_error("OpModelPtrFactory cannot be serialized!");
+			for (unsigned int i = 0; i < receiver.size(); ++i)
+			{
+				// check if the instances are really of the type of this OpModel, otherwise there may be duplicates between polymorphic factories populating the same receiver.
+				T *currentModel = dynamic_cast<T*>(receiver[i]);
+				if (currentModel != NULL)
+				{
+					OpModel<T> *parser = _ModelPtr<T>(currentModel);
+					parser->Serialize(key, stream, indents);
+					delete parser;
+				}
+			}
 		};
 
 		string ValueAsString() { return ""; };

@@ -40,8 +40,8 @@ namespace Oparse
 	OpString *_Param(string &receiver, bool tolower = false);
 	OpBool *_Param(bool &receiver);
 	OpVector3 *_Param(VECTOR3 &receiver);
-	OpLambda * _Param(function<string(string value)> lambda, bool tolower = false);
-	OpReadWriteLambda * _Param(function<string(string value)> readLambda, function<string()> writeLambda, bool tolower = false);
+	OpLambda * _Lambda(function<string(string value)> lambda, bool tolower = false);
+	OpReadWriteLambda * _Lambda(function<string(string value)> readLambda, function<string()> writeLambda, bool tolower = false);
 	OpList *_List(vector<int> &receiver, string delimiter = ",\t");
 	OpList *_List(vector<float> &receiver, string delimiter = ",\t");
 	OpList *_List(vector<double> &receiver, string delimiter = ",\t");
@@ -75,10 +75,24 @@ namespace Oparse
 	 */
 	OpModelDef MergeModelDefs(const OpModelDef &defOne, const OpModelDef &def2);
 
+	/**
+	 * \brief Parses the file at the given path.
+	 */
 	PARSINGRESULT ParseFile(string path, OpModelDef &mapping);
+	
+	/**
+	 * \brief Writes the passed data to a file at the given path.
+	 */
 	void WriteFile(string path, OpModelDef &mapping);
 
+	/**
+	 * \brief Parses data from a string
+	 */
 	PARSINGRESULT ParseString(string data, OpModelDef &mapping, string name = "parsed from string");
+	
+	/**
+	 * \brief Writes the passed data to a string.
+	 */
 	void WriteString(string &OUT_receiver, OpModelDef &mapping);
 
 #ifndef OPARSE_STANDALONE

@@ -7,7 +7,6 @@
 
 using namespace Oparse;
 
-
 int main()
 {
 	// instantiate two models for demonstration

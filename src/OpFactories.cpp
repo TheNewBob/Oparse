@@ -35,12 +35,12 @@ namespace Oparse
 		return new OpVector3(receiver);
 	}
 
-	OpLambda * _Param(function<string(string value)> lambda, bool tolower)
+	OpLambda * _Lambda(function<string(string value)> lambda, bool tolower)
 	{
 		return new OpLambda(lambda, tolower);
 	}
 
-	OpReadWriteLambda * _Param(function<string(string value)> readLambda, function<string()> writeLambda, bool tolower)
+	OpReadWriteLambda * _Lambda(function<string(string value)> readLambda, function<string()> writeLambda, bool tolower)
 	{
 		return new OpReadWriteLambda(readLambda, writeLambda, tolower);
 	}

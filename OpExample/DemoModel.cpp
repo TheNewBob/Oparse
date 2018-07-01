@@ -11,7 +11,7 @@ OpModelDef DemoModel::GetModelDef()
 	// this is purely for demonstration of lambdas, to show that you can still exert a very high level of control if you need it for some things.
 	// this thing will read all the values of a certain parameter, that occurs multiple times,
 	// separates all the words and stores them in a single vector. It's a silly use case, as examples often are.
-	OpLambda *wordCollector = _Param([&](string value) {
+	OpLambda *wordCollector = _Lambda([&](string value) {
 		vector<string> currentWords;
 		SplitString(value, currentWords, " ");
 		words.insert(words.end(), currentWords.begin(), currentWords.end());
@@ -35,7 +35,10 @@ OpModelDef DemoModel::GetModelDef()
 		{ "mixedList",{ mixedList.GetMapping(),{} } },
 		{ "BLOCKLIST 1",{ _Block<MixedListDemo>(blockDemo),{} } },
 		{ "Model 1",{ _Model<MyModel>(myModel),{} } },
-		{ "lambdaDemo", { wordCollector, {} } }
+		{ "lambdaDemo", { wordCollector, {} } },
+		{ "Polymorph Alpha", { _ModelFactory<AlphaModel, PolymorphicFactoryDemo>(modelFactoryDemo), {} } },
+		{ "Polymorph Beta",{ _ModelFactory<BetaModel, PolymorphicFactoryDemo>(modelFactoryDemo),{} } }
+
 	};
 }
 
@@ -43,10 +46,26 @@ Oparse::OpMixedList * MixedListDemo::GetMapping()
 {
 	return _MixedList(OpValues() =
 		{
-			{ _Param(first),{ _ISANYOF(vector<string>() = { "a vector3" }) } },
+		{ _Param(first),{ _ISANYOF(vector<string>() = { "a vector3" }) } },
 		{ _Param(vector3),{} },
 		{ _Param(second),{ _ISANYOF(vector<string>() = { "a vector3" }) } },
 		{ _Param(testSuccessful),{} },
 		{ _Param(third),{ _LENGTH(0, 256) } }
 		}, ",");
+}
+
+OpModelDef AlphaModel::GetModelDef()
+{
+	return OpModelDef() = {
+		{ "type", { _Param(type), {} } },
+		{ "alphaParam", { _Param(alphaParam), {} } }
+	};
+}
+
+OpModelDef BetaModel::GetModelDef()
+{
+	return OpModelDef() = {
+		{ "type",{ _Param(type),{} } },
+		{ "betaParam",{ _Param(betaParam),{} } }
+	};
 }
