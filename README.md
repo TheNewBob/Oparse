@@ -121,42 +121,42 @@ Below is a list of the available parser factories and what types they support.
 For simplicity, all syntax examples in ths section are kept minimal and do not contain validators.
 
 ### _Param(&receiver)
-Binds a simple config parameter to a variable. 
-__config syntax:__
+Binds a simple config parameter to a variable.   
+__config syntax:__  
 ```
 foo = bar
 ```
-__Oparse syntax:__
+__Oparse syntax:__  
 ```
 { "foo", Param(myStringProperty), {} } 
 ```
-__supported types for receiver:__
+__supported types for receiver:__  
 > int, float, double, bool, string, VECTOR3  
 
 
 ### _List(&receiver, delimiter)
 Fills a vector with a series of values separated by a specifiable delimiter.
-__config syntax:__
+__config syntax:__  
 ```
 foo = 1, 2, 3, 4, 5 ...
 ```
-__Oparse syntax:__
+__Oparse syntax:__  
 ```
 { "foo", _List(myIntVector), {} }
 ```
-__supported types for receiver:__
-> vector<int>, vector<float>, vector<double>, vector<bool>, vector<string>, vector<VECTOR3>
+__supported types for receiver:__  
+> vector\<int\>, vector\<float\>, vector\<double\>, vector\<bool\>, vector\<string\>, vector\<VECTOR3\>
 
 
 ### _MixedList(OpValues receivers, delimiter)
 A Mixed list is a list of *determinate* length, in which every element may have another Type. 
 A good example for this would be the way Orbiter expects an individual Attachmentpoint to be defined.
-The individual values in a MixedList are defined by _Param parsers, and may have individual validators.
-__config syntax:__
+The individual values in a MixedList are defined by _Param parsers, and may have individual validators.  
+__config syntax:__  
 ```
 foo = 1 2 3, is not, 1.0, 2.0, 3.0, that would be, false
 ```
-__Oparse syntax:__
+__Oparse syntax:__  
 ```
 { "foo", { _MixedList(OpValues() = {
             { _Param(someVECTOR3), {} },
@@ -169,55 +169,55 @@ __Oparse syntax:__
         }, ",")
 }};
 ```
-__supported types:__
+__supported types:__  
 A MixedList takes an instance of type OpValues, which is a vector of pairs that map a _Param to a list of validators. 
 As such, elements of a MixedList can have any type that _Param supports.
-__Note:__
+__Note:__  
 The _REQUIRED() validator does not work on elements of a MixedList and will always fail, so don't use it.
 You don't need it anyways, since you will receive formatting errors if the list doesn't match the mapping.
 
 
 ### _BlockList<T>(&receiver)
 A BlockList is a list of MixedLists in a block statement, with each MixedList being on its own line. 
-A Blocklist binds to a vector pointers of any class, as long as that class provides a method with the signature `OpMixedList *GetMapping()`.
-__config syntax:__
+A Blocklist binds to a vector pointers of any class, as long as that class provides a method with the signature `OpMixedList *GetMapping()`.  
+__config syntax:__  
 ```
 BEGIN_FOO
 	1 2 3, is not, 1.0, 2.0, 3.0, that would be, false
 	1 2 3, is certainly not, 1.5, 2.5, 3.5, that is, true
 END_FOO
 ```
-__Oparse syntax:__
+__Oparse syntax:__  
 ```
 { "foo", _BlockList<MyMixedList>(myMixedListVector), {} } 
 ```
-__supported types for receiver:__
-> vector<T*>, where class T implements a function with the signature OpMixedList *GetMapping().
+__supported types for receiver:__  
+> vector\<T*\>, where class T implements a function with the signature OpMixedList *GetMapping().
 
 
 ### _Model<T>(&receiver)
 A Model is a class that (very preferably) exists for the sole purpose of storing data.
-The only condition for a valid Oparse model is that it implements a method with the signature OpModelDef GetModelDef();
-__config syntax:__
+The only condition for a valid Oparse model is that it implements a method with the signature OpModelDef GetModelDef();  
+__config syntax:__    
 ```
 BEGIN_FOO
 	foo = this is a nested block
 	bar = any syntax valid inside a cfg is also valid inside a model block
 END_FOO
 ```
-__Oparse syntax:__
+__Oparse syntax:__  
 ```
 { "foo", _Model<MyModel>(myModelInstance), {} } 
 ```
-__supported types for receiver:__
+__supported types for receiver:__  
 > T, T*, where class T implements a method with the signature OpModelDef GetModelDef();
 
 
 ### _ModelFactory<T, U(optional)>(&receiver)
 A parser that will create new model instances and fill a passed vector with pointers to them.
 Supports polymorphism by letting you define the type of the base class of the models in U.
-Note that while T must provide a method with the signature OpModelDef GetModelDef(), there is no such requirement for U.
-__config syntax:__
+Note that while T must provide a method with the signature OpModelDef GetModelDef(), there is no such requirement for U.  
+__config syntax:__    
 The following with above definition will result in myModelVector containing two instaces of type MyModel*:
 ```
 BEGIN_FOO
@@ -228,13 +228,13 @@ BEGIN_FOO
 	bar = this is the second instance
 END_FOO
 ```
-__Oparse syntax:__
+__Oparse syntax:__  
 ```
 { "foo", _ModelFactory<MyModel>(myModelVector), {} }
 ```
-__supported types for receiver:__
-vector<T*> if only T is given, or vector<U*> where T inherits U when T and U are given. T has to implement a method with the signature OpModelDef GetModelDef();
-__Notes on polymorphism:__
+__supported types for receiver:__  
+vector\<T*\> if only T is given, or vector\<U*\> where T inherits U when T and U are given. T has to implement a method with the signature OpModelDef GetModelDef();
+__Notes on polymorphism:__  
 When using polymorphism, it is a typical case to map different parameters to the same vector, like so:
 ```
 vector<MyModelBase*> receiver;
@@ -251,12 +251,12 @@ Since both inherit from MyModelBase, this is not a problem.
 A parameter parser for those moments when the shoe just won't fit. 
 It lets you pass a lambda function that receives the value of the parameter as a string and expects a string with an error message in return.
 In the desirable case of there not being any errors, just return an empty string.
-Optionally, you can also pass a lambda function that just returns a string as a second argument. If it is present, it will be used for serialisation.
-__config syntax__
+Optionally, you can also pass a lambda function that just returns a string as a second argument. If it is present, it will be used for serialisation.  
+__config syntax__  
 ```
 foo = this is kind of pointless.
 ```
-__Oparse syntax:__
+__Oparse syntax:__  
 This example with the below config parameter will result in myvar containing the phrase "this is kind of pointless. What would you have done to demonstrate this?".
 ```
 { "foo", _Lambda([&](string value) {
@@ -265,10 +265,10 @@ This example with the below config parameter will result in myvar containing the
 	}), {}
 }
 ```
-__supported types for receiver:__
+__supported types for receiver:__  
 A Lambda parser does not actually map to a receiver. It just passes you the parsed string belonging to a parameter. 
 What you do with it and what you assign it to is completely up to you.
-__Note:__
+__Note:__  
 Lambda parsers can *NOT* be validated!
 
 
