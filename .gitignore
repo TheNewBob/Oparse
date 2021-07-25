@@ -5,4 +5,3 @@
 /Standalone_Release
 *.vcxproj.user
 **/.vs
-/lib
