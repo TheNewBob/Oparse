@@ -2,6 +2,8 @@
 
 namespace Oparse
 {
+	template<typename T> class OpModel;
+	template <typename T> OpModel<T>* _ModelPtr(T* receiver);
 
 	typedef map<string, pair<Oparse::OpValue*, vector<Oparse::OpValidator*>>> OpModelDef;
 	typedef vector<pair<Oparse::OpValue*, vector<Oparse::OpValidator*>>> OpValues;
