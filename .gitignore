@@ -5,3 +5,5 @@
 /Standalone_Release
 *.vcxproj.user
 **/.vs
+**/lib/*.pdb
+**/lib/*.idb
