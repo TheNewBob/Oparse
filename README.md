@@ -16,7 +16,7 @@ It is also no problem to use Oparse without linking the orbiter sdk using #def O
 * Add Oparse_Debug.lib, Oparse_Release.lib, Oparse_Standalone_Debug.lib or Oparse_Standalone_Release.lib to your project dependencies.
 * If you are using one of the standalone libraries, make sure to add #def OPARSE_STANDALONE to your project.
 
-Libraries are built in VS 2017, so if you're using another version, you might have to rebuild. If you cloned Oparse into the orbitersdk folder this should work without issues, if not you will have to change the include and library paths for the orbiter sdk in the project settings.
+Libraries are built in VS 2019, so if you're using another version, you might have to rebuild. If you cloned Oparse into the orbitersdk folder this should work without issues, if not you will have to change the include and library paths for the orbiter sdk in the project settings.
 
 ## Quick and dirty usage
 
