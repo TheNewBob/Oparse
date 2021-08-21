@@ -17,7 +17,7 @@ namespace Oparse
 		: public OpBlockListFacade
 	{
 	public:
-		OpBlockList<T>(vector<T> &receiver) : receiver(receiver), ptrReceiver(vector<T*>()) {};
+		OpBlockList<T>(vector<T> &receiver) : receiver(receiver) {};
 		OpBlockList<T>(vector<T*> &receiver) : receiver(vector<T>()), ptrReceiver(receiver), ptrs(true) {};
 		~OpBlockList() 
 		{
@@ -85,7 +85,8 @@ namespace Oparse
 
 	private:
 		vector<T> &receiver;
-		vector<T*> &ptrReceiver;
+		vector<T*> ptrReceiverBacker = vector<T*>();
+		vector<T*> &ptrReceiver = ptrReceiverBacker;
 		bool ptrs = false;
 
 		string valueAsString(unsigned int indents)
